@@ -1,8 +1,8 @@
 <template>
   <div style="margin-top: 50px;height:100%;" v-touch:right="back">
     <Header :backoptions="backoptions" @tobackpage="back" title="数据下发审批详情" />
-     <actionsheet v-model="tsShow" :menus="menusall" @on-click-menu-delete="tsClose" :close-on-clicking-mask='false'></actionsheet>
-     <CharacterIssueCommon
+    <actionsheet v-model="tsShow" :menus="menusall" @on-click-menu-delete="tsClose" :close-on-clicking-mask='false'></actionsheet>
+    <CharacterIssueCommon
       :isSentitiveState.sync="isSentitiveState"
       :sentitiveInfo.sync="sentitiveInfo"
     />
@@ -35,9 +35,10 @@
       <x-textarea
         title="审批意见"
         readonly
+        style="margin-bottom: 0.4rem;"
         class="label_color"
-        :rows='2'
-        v-model="lastback"
+        :rows='1'
+        v-html="lastback"
       ></x-textarea>
     </group>
   </div>
@@ -69,11 +70,11 @@ export default {
     }
   },
   created() {
+    console.log('-------------------------------created')
     // 推送进来的
-    console.log(222,this.$route.query);
       if (this.$route.query.hasOwnProperty('todoType')) {
         hideWebViewTitle()
-        this.getinto()
+        this.getApplyMsg();
       } else {
         this.getTableData();
       }
@@ -137,11 +138,14 @@ export default {
                   type: "getssoToken",
                   ssoToken: token,
                 });
-                this.getApplyMsg(res.data.principal.username);
                 this.currentUserInfo = res.data.principal;
+                this.getTableData()
                 let seeData = JSON.stringify(res.data.principal);
                 window.sessionStorage.setItem("currentUser", seeData);
-                Bus.$emit("startShowIssue");
+                console.log('----------------------------------Bus.$emit("startShowIssue")')
+                setTimeout(()=>{
+                  Bus.$emit("startShowIssue");
+                },1000)
               })
               .catch((err) => {
                 let omsg = _this.outmsg(err);
@@ -166,7 +170,11 @@ export default {
               data: { data, code },
             } = res;
             this.flowData = data;
-            this.flowData.length && this.flowData[0].approveState == 2 ? this.lastback = '驳回   ' : this.lastback = '同意   ' 
+            this.lastback = this.flowData.length && this.flowData[0].approveState == 2
+              ? `<span style="color:grey;margin-right:4rem">审批意见</span>
+              驳回`
+              : `<span style="color:grey;margin-right:4rem">审批意见</span>
+              同意`;
             console.log(this.flowData);
             this.$forceUpdate()
             this.flowData.sort(function (a, b) {
@@ -225,7 +233,7 @@ export default {
               //  this.tsShow=true
               //  this.sheet('此流程请在PC端处理')
               //  return
-              this.getTableData()
+              this.getinto()
             }
           }
         })

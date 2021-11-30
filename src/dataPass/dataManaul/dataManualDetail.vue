@@ -192,9 +192,10 @@
       <x-textarea
         title="审批意见"
         readonly
+        style="margin-bottom: 0.4rem;"
         class="label_color"
-        :rows='2'
-        v-model="lastback"
+        :rows='1'
+        v-html="lastback"
       ></x-textarea>
     </group>
     <!-- 完结是3  退回是2 -->
@@ -423,7 +424,11 @@ export default {
     }
   },
   mounted() {
-    this.lastback = this.$route.query.status == '3' ? '同意   ' : '驳回   ';
+    this.lastback = this.$route.query.status == '3'
+      ? `<span style="color:grey;margin-right:4rem">审批意见</span>
+      同意`
+      : `<span style="color:grey;margin-right:4rem">审批意见</span>
+      驳回`;
     if (!this.$route.query.hasOwnProperty("todoType")) {
       this.getDealSpeed();
       this.getApplyWriteMsg();

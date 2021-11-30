@@ -159,9 +159,10 @@
       <x-textarea
         title="审批意见"
         readonly
+        style="margin-bottom: 0.4rem;"
         class="label_color"
-        :rows='2'
-        v-model="lastback"
+        :rows='1'
+        v-html="lastback"
       ></x-textarea>
     </group>
   </div>
@@ -456,7 +457,11 @@ export default {
             if (data.length > 1) {
               this.flowm = `height:${(Number(data.length) - 1) * 0.75}rem;`;
             }
-            this.flowData.length && this.flowData[0].approveState == 2 ? this.lastback = '驳回   ' : this.lastback = '同意   ';
+            this.lastback = this.flowData.length && this.flowData[0].approveState == 2
+              ? `<span style="color:grey;margin-right:4rem">审批意见</span>
+              驳回`
+              : `<span style="color:grey;margin-right:4rem">审批意见</span>
+              同意`;
             console.log(111,this.flowData);
             this.flowData.forEach(item => {
               if (item.status === '待处理' || item.status === '处理中') {

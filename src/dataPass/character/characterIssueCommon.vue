@@ -295,7 +295,9 @@ export default {
     },
     // 推送时加载的数据
     tsData() {
+      console.log('tsdata');
       Bus.$on('startShowIssue', () => {
+        console.log('=-------------------------------Bus.$on(startShowIssue)')
          this.getApplyMsg();
       })
     },
@@ -339,9 +341,11 @@ export default {
     },
     // 获取用户申请时填写的信息
     getApplyMsg() {
+      console.log('------------------------------getApplyMsg:start')
       const params = { portalQaId: this.$route.query.dwpDataId };
       ajaxGet(URL.url.getCharacterIssueApplyMsg, params)
         .then((res) => {
+          console.log('------------------------------getApplyMsg:data')
           if (res.data.data != null && res.data.data != "") {
             this.getApplyInfo(res.data.data.createUser);
             let {
@@ -377,6 +381,7 @@ export default {
           }
         })
         .catch((error) => {
+          console.error('---------------------------getApplyMsg:error', error)
           let omsg = this.outmsg(error);
           if (!omsg) {
             return;

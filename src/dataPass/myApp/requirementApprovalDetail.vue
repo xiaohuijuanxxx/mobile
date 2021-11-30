@@ -191,10 +191,10 @@
     <x-textarea v-if="this.$route.query.status == '3' || this.$route.query.status == '9'"
       title="审批意见"
       readonly
-      style="margin-top:0.4rem;"
+      style="margin-top:0.4rem;margin-bottom: 0.4rem;"
       class="label_color"
-      :rows='2'
-      v-model="lastback"
+      :rows='1'
+      v-html="lastback"
     ></x-textarea>
     <template
       v-if="this.$route.query.status != '3' && this.$route.query.status != '9'"
@@ -426,7 +426,11 @@ export default {
     // onFail: function() {} // 禁⽌失败
     // });
     //详情
-    this.lastback = this.$route.query.status == '3' ? '同意   ' : '驳回   ';
+    this.lastback = this.$route.query.status == '3' 
+    ? `<span style="color:grey;margin-right:4rem">审批意见</span>
+    同意`
+    : `<span style="color:grey;margin-right:4rem">审批意见</span>
+    驳回`;
     let _this = this;
     let requireid = _this.getquerystring("requireId");
     let node = _this.getquerystring("node") || "";

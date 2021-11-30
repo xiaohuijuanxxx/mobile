@@ -90,9 +90,10 @@
       <x-textarea v-if="this.$route.query.status == '2' || this.$route.query.status == '3'"
         title="审批意见"
         readonly
+        style="margin-bottom: 0.4rem;"
         class="label_color"
-        :rows='2'
-        v-model="lastback"
+        :rows='1'
+        v-html="lastback"
       ></x-textarea>
     </group>
     <div v-if="this.$route.query.status != 2 && this.$route.query.status != 3">
@@ -328,7 +329,11 @@ export default {
     }
   },
   mounted() {
-    this.lastback = this.$route.query.status == '3' ? '完结   ' : '退回   ';
+    this.lastback = this.$route.query.status == '3'
+      ? `<span style="color:grey;margin-right:4rem">审批意见</span>
+      同意`
+      : `<span style="color:grey;margin-right:4rem">审批意见</span>
+      驳回`;
     if (!this.$route.query.hasOwnProperty("todoType")) {
       this.getDealSpeed();
       this.getApplyWriteMsg();

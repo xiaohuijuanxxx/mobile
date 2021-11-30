@@ -75,9 +75,10 @@
             <x-textarea v-if="this.$route.query.applyStatus == '0' || this.$route.query.applyStatus == '6'"
             title="审批意见"
             readonly
+            style="margin-bottom: 0.4rem;"
             class="label_color"
-            :rows='2'
-            v-model="lastback"
+            :rows='1'
+            v-html="lastback"
         ></x-textarea>
         </group>
         <group v-if="this.$route.query.applyStatus != '0' && this.$route.query.applyStatus != '6'">
@@ -172,7 +173,11 @@
             //  onSuccess: function() {}, // 禁⽌成功
             //  onFail: function() {} // 禁⽌失败
             // });
-            this.lastback = this.$route.query.applyStatus == '0' ? '驳回   ' : '完结   ';
+            this.lastback = this.$route.query.applyStatus == '0'
+                ? `<span style="color:grey;margin-right:4rem">审批意见</span>
+                驳回`
+                : `<span style="color:grey;margin-right:4rem">审批意见</span>
+                完结`;
             let _this=this,
                 requireid=_this.getquerystring('requireId'),
                 node=_this.getquerystring('node') || '',
