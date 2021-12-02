@@ -17,7 +17,7 @@
             <x-button mini style="background:#fff;color:#E64340" v-if="ifbatchReviewShow"  @click.native="toEdit">批量处理</x-button>
         </flexbox-item>
         <flexbox-item :span="1" v-if="userlist.length">
-            <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(194, 27, 27);
+            <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(247, 37, 37);
             color:#fff;border-radius: 50%;margin-top: -0.07rem;" >
             <b style="padding:0.07rem 0.01rem 0.05rem 0;font-size: 0.25rem;display: block;text-align: center;">{{userlist.length}}</b>
           </div>
@@ -130,7 +130,7 @@
         <x-button mini style="background:#fff;color:#E64340" v-if="ifbatchIndexShow" @click.native="toMeit">批量处理</x-button>
       </flexbox-item>
       <flexbox-item :span="1" v-if="requirementlist.length">
-          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(194, 27, 27);
+          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(247, 37, 37);;
             color:#fff;border-radius: 50%;margin-top: -0.07rem;" >
             <b style="padding:0.05rem 0 0.05rem 0;font-size: 0.25rem;display: block;text-align: center;">{{requirementlist.length}}</b>
           </div>
@@ -240,7 +240,7 @@
           <x-icon v-show="tRequireStatus" type="ios-arrow-up"></x-icon>
         </flexbox-item>
         <flexbox-item :span="1" v-if="tRequirementlist.length">
-          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(194, 27, 27);
+          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(247, 37, 37);;
             color:#fff;border-radius: 50%;margin-top: -0.07rem;" >
             <b style="padding:0.06rem 0.075rem 0.05rem 0.05rem;font-size: 0.25rem;display: block;text-align: center;">{{tRequirementlist.length}}</b>
           </div>
@@ -248,23 +248,101 @@
     </flexbox>
     <CharacterNeedList :tRequireStatus="tRequireStatus" :tRequirementlistMid="tRequirementlistMid" @showlist="turnOff" />
     <!-- 特色需求 结束 -->
+
     <!-- 特色下发申请 开始 -->
-    <flexbox class="appfirstboxt" @click.native="onOrOff(dataDownStatus, dataDownlist, 'dataDownlist', 'dataDownStatus')">
+    <!-- 非批量审批的时候flexbox -->
+    <div v-show="xfBatchEdit">
+      <flexbox class="appfirstboxt" @click.native="onOrOff(dataDownStatus, dataDownlist, 'dataDownlist', 'dataDownStatus')">
         <flexbox-item :span="3.7">
             <div class="midFontSize">数据下发审批</div>
         </flexbox-item>
-        <flexbox-item :span="5.07">
+        <flexbox-item :span="2.3">
           <x-icon v-show="!dataDownStatus" type="ios-arrow-down"></x-icon>
           <x-icon v-show="dataDownStatus" type="ios-arrow-up"></x-icon>
         </flexbox-item>
+        <flexbox-item :span="2.5" style="margin-bottom:0.1rem">
+            <x-button mini style="background:#fff;color:#E64340" v-if="ifbatchxfShow"  @click.native="toxfEdit">批量处理</x-button>
+        </flexbox-item>
         <flexbox-item :span="1" v-if="dataDownlist.length">
-          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(194, 27, 27);
+          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(247, 37, 37);;
             color:#fff;border-radius: 50%;margin-top: -0.07rem;" >
             <b style="padding:0.06rem 0.075rem 0.05rem 0.05rem;font-size: 0.25rem;display: block;text-align: center;">{{dataDownlist.length}}</b>
           </div>
-      </flexbox-item>
-    </flexbox>
-    <CharacterNeedList :tRequireStatus="dataDownStatus" :tRequirementlistMid="dataDownlistMid" :isIssue='true' @showlist="turnOff"/>
+        </flexbox-item>
+      </flexbox>
+      <CharacterNeedList :tRequireStatus="dataDownStatus" :tRequirementlistMid="dataDownlistMid" :isIssue='true' @showlist="turnOff"/>
+    </div>
+    <!-- 批量审批的时候flexbox -->
+    <div v-show="!xfBatchEdit">
+       <flexbox class="appfirstboxt" style="padding-top:0.1rem">
+        <el-checkbox class="my-el-checkbox" :indeterminate="xfIndeterminate" v-model="checkxfAll" style="position:relative;">
+          <div
+                  style="
+                    position: absolute;
+                    left: -6px;
+                    top: -3px;
+                    width:30px;
+                    height:10vh;
+                    z-index: 99;
+                  "
+                  @click="handleCheckxfAllChange"
+                ></div>
+        </el-checkbox>
+        <flexbox-item :span="5">
+            <div><span class="midFontSize">数据下发审批</span></div>
+        </flexbox-item>
+        <flexbox-item :span="3">
+            <x-button mini type="warn"  @click.native="showxfPlugin">批量处理</x-button>  
+        </flexbox-item>
+        <flexbox-item :span="2">
+            <x-button mini style="background:#fff;color:#656565;" @click.native="toxfEdit">取消</x-button>  
+        </flexbox-item>
+      </flexbox>
+      <template v-if="xflist.length">
+          <div class="parent">
+            <el-checkbox-group v-model="checkedxf" >
+              <el-checkbox v-for="item in xflist" :label="item.dwpDataId" :key="item.dwpDataId" :disabled="checkboxxf(item)" class="appfirstbox" style="position:relative;">
+                  <div
+                  style="
+                    position: absolute;
+                    width: 0.5rem;
+                    left: 0;
+                    top: 2px;
+                    bottom:2px;
+                    z-index: 99;
+                  "
+                  @click="setCheckMyselfxf(item.dwpDataId)"
+                ></div>
+                  <div style="display:flex;">
+                    <div style="width:1.2rem;">
+                        <img v-if='item.mxUserInfo' class="img" :src="item.mxUserInfo.avatarUrl" />
+                        <img v-else class="img" src="static/title_picture.png" />                        
+                    </div>
+                    <div class="myflexItem">
+                          <div class="approvalpeople minFontSize">{{item.createName}}</div>
+                          <div class="approvalThing  minFontSizemid lineHei overone">{{item.dwpDataApplyTitle}}</div>
+                    </div>
+                  </div> 
+              </el-checkbox>
+            </el-checkbox-group>
+          </div>
+      </template>
+      <template v-else>
+        <div class='nodatacss minFontSizemid'>暂无数据</div>
+      </template>
+      <actionsheet v-model="aonShow" :menus="menusall" :close-on-clicking-mask="false"></actionsheet>
+      <actionsheet v-model="donShow" :menus="menusall" @on-click-menu-delete="xfConfirm" show-cancel :close-on-clicking-mask="false"></actionsheet>  
+      <div>
+        <popup v-model="batchxfVisible" :hide-on-blur="false">
+          <popup-header left-text="取消" right-text="确定" title="请选择" :show-bottom-border="false" @on-click-left="batchxfVisible=false" @on-click-right="rightxfSubmit"></popup-header>
+          <group gutter="0">
+            <radio :options="selectlist" v-model="approvalResult"></radio>
+          </group>
+        </popup>
+      </div>
+    </div>
+    
+    <!-- <CharacterNeedList :tRequireStatus="dataDownStatus" :tRequirementlistMid="dataDownlistMid" :isIssue='true' @showlist="turnOff"/> -->
     <!-- 特色下发申请 结束 -->
     <!-- 手工数据开始 -->
     <DataManualList :approveStatus="0" />
@@ -281,7 +359,7 @@
         <x-icon v-show="pcStatus" type="ios-arrow-up"></x-icon>
       </flexbox-item>
       <flexbox-item :span="1" v-if="noresponelist.length">
-          <div style="display:block;height:0.41rem;width: 0.42rem; background:rgb(194, 27, 27);
+          <div style="display:block;height:0.41rem;width: 0.42rem; background:rgb(247, 37, 37);;
             color:#fff;border-radius: 50%;margin-top: -0.07rem;" >
             <b style="padding:0.06rem 0.01rem 0.055rem 0;font-size: 0.25rem;display: block;text-align: center;">{{noresponelist.length}}</b>
           </div>
@@ -391,6 +469,15 @@ export default {
         this.handleCheckedUsersChange(this.checkedUsers)
       })
     },
+    // CheckBox选中数据下发审批
+    setCheckMyselfxf(item) {
+      let linshi = this.dataxf.slice(0)
+      this.checkedxf = setCheckMyselves(item, this.checkedxf);
+      this.dataxf = linshi
+      setTimeout(() => {
+        this.handleCheckedxfChange(this.checkedxf)
+      })
+    },
     // 把特色需求、下发的不能在移动端处理问题放进来
     setCharacterNotMobile() {
       this.characterIssueNotMobile.forEach(item => {
@@ -418,7 +505,7 @@ export default {
           })
           _this.userlist=recordsdata.filter(im=>{return im.node != '5'})
           _this.closeloading()
-          _this.ifShow(_this.userlistMid)
+          _this.ifShow(_this.userlist)
           _this.isEdit=true
         }
         
@@ -462,7 +549,7 @@ export default {
             return its.node != '4'
           })
           _this.closeloading()
-          _this.onShow(_this.requirementlistMid)
+          _this.onShow(_this.requirementlist)
           _this.isMeit=true 
         }
       }).catch(err => {
@@ -528,11 +615,22 @@ export default {
           this.ifbatchReviewShow = false
         }
       },
+      toxfEdit(){
+        this.xfBatchEdit = !this.xfBatchEdit;
+        if (this.xfBatchEdit) {
+          this.checkedxf = []
+          this.checkxfAll = false;
+          this.dataDownStatus = false;
+          this.dataDownlistMid = [];
+        }
+      },
       toEdit(){
         this.isEdit=!this.isEdit;
         if (this.isEdit) {
           this.checkedUsers = []
           this.checkUserAll = false
+          this.userStatus = false;
+          this.userlistMid = [];
         }
       },
       showPlugin() {
@@ -546,8 +644,23 @@ export default {
           this.sheet('数据需求可能涉及客户敏感信息的查询及导出，确定进行批量审批吗？')
         }
       },
+      //数据下发点击批量审批
+      showxfPlugin() {
+        this.aonShow=false;
+        this.donShow = false
+        if (this.checkedxf.length === 0) {
+          this.aonShow=true;
+          this.sheet('至少选择一条数据')
+        } else if (this.checkedxf.length > 0) {
+          this.donShow = true 
+          this.sheet('确定对数据下发进行批量审批吗？')
+        }
+      },
       toConfirm() {
         this.batchReviewVisible = true;
+      },
+      xfConfirm() {
+        this.batchxfVisible = true;
       },
       handleCheckUserAllChange() {
         this.checkUserAll = !this.checkUserAll
@@ -555,10 +668,22 @@ export default {
         this.checkedUsers =val?this.dataUser:[];
         this.toIndeterminate= false;
       },
+      //数据下发批量审批
+      handleCheckxfAllChange(){
+        this.checkxfAll = !this.checkxfAll
+        let val = this.checkxfAll
+        this.checkedxf =val?this.dataxf:[];
+        this.xfIndeterminate= false;
+      },
       handleCheckedUsersChange(value) {
         let checkedUserCount = value.length;
         this.checkUserAll = checkedUserCount ===this.dataUser.length;
         this.toIndeterminate = checkedUserCount > 0 && checkedUserCount <this.dataUser.length;
+      },
+      handleCheckedxfChange(value) {
+        let checkedxfCount = value.length;
+        this.checkxfAll = checkedxfCount ===this.dataxf.length;
+        this.xfIndeterminate = checkedxfCount > 0 && checkedxfCount <this.dataxf.length;
       },
       rightReviewSubmit(){
         let data={ applyIds:JSON.stringify(this.checkedUsers),
@@ -571,7 +696,33 @@ export default {
           this.checkedUsers=[]
           this.getTable1()
           this.succeed=true
+          this.sheet("提交成功");
+          this.userlistMid = [];
+          this.userStatus = false;
+        }).catch(error => {
+          let omsg=this.outmsg(error)
+            this.closeloading()
+              if(!omsg){
+                return
+              }
+            this.actionSheetVisable=true
+            this.sheet(omsg)
+        })
+      },
+      rightxfSubmit(){
+        let data={ dwpDataId:JSON.stringify(this.checkedxf),
+                  'username':JSON.parse(sessionStorage.getItem('currentUser')).username,
+	                'approvalResult': this.approvalResult
+                  };        
+        ajaxPost(URL.url.batchReview1xxxxx,JSON.stringify(data)).then(res => {
+          this.batchxfVisible = false
+          this.xfIndeterminate= false
+          this.checkedxf=[]
+          this.getxfdata()
+          this.succeed=true
           this.sheet("提交成功")
+          this.tRequirementlistMid = [];
+          this.tRequireStatus = [];
         }).catch(error => {
           let omsg=this.outmsg(error)
             this.closeloading()
@@ -589,6 +740,13 @@ export default {
           return true
         }
       },
+      checkboxxf(row) {
+        if (row.dwpDataManageStatus === '5') {
+          return false
+        } else {
+          return true
+        }
+      },
 
       // 需求审批
       toMeit(){
@@ -596,6 +754,8 @@ export default {
         if (this.isMeit) {
           this.checkedRequires = []
           this.checkRequireAll = false
+          this.requireStatus = false;
+          this.requirementlistMid = [];
         }
         
       },
@@ -627,6 +787,20 @@ export default {
           this.ifbatchIndexShow = false
         }
       },
+      xfShow(data) {
+        let tran = 'no'; //no 不显示  yes 显示
+        data.forEach(res => {
+          if (res.dwpDataManageStatus == '5') {
+              tran = 'yes'           
+              this.dataxf.push(res.dwpDataId)            
+          }
+        })
+        if( tran == 'yes'){
+          this.ifbatchxfShow = true
+        }else{
+          this.ifbatchxfShow = false
+        }
+      },
       checkboxF(row) {
         if (row.node == '5') {
           return false
@@ -656,6 +830,8 @@ export default {
           this.getTable2() 
           this.succeed=true
           this.sheet("提交成功")
+          this.requirementlistMid = [];
+          this.requireStatus = false;
         }).catch(error => {
           let omsg=this.outmsg(error)
             this.closeloading()
@@ -672,16 +848,44 @@ export default {
             type: 'changepage',
             pageindex: 2,
           });
-        },
+      },
+      //获取数据下发列表数据
+      /**
+       * 如果数据中有接口人待复核的数据
+       * 那么批量审批
+       */
+      getxfdata(){
+        let that = this;
+        const signs = JSON.parse(sessionStorage.getItem('signs'))
+        const parmas = {
+          page: 1,
+          per_page: 9999,
+          userName: JSON.parse(sessionStorage.getItem('currentUser')).username,
+          roles: signs,
+          isTodo: 'N'
+        };
+        ajaxGet(URL.url.getCharacterIssueAllData,parmas).then(res=> {
+          let {data:{data,code}}=res
+          let recordsdata = that.changephotos(data)
+          that.xflist = recordsdata;
+          console.log(that.xflist)
+          that.xfShow(that.xflist)
+        }).catch((error) => {
+          this.sheet(error);
+        });
+      },
   },
   mounted() {
     this.noresponelist=[]
     this.getTable1()
     this.getTable2()
+    this.getxfdata()
     this.setCharacterNotMobile()
   },
   data () {
     return {
+      //数据下发是否可以批量审批
+      xfBatchEdit:true,
       backoptions: {
         preventGoBack: true,
         backText: '',
@@ -698,6 +902,8 @@ export default {
       pcStatus: 0,
       //用户审批列表
       userlist: [],
+      //数据下发批量审批列表
+      xflist: [],
       //用户审批列表-展开/收起
       userlistMid: [],
       //需求审批列表
@@ -717,16 +923,25 @@ export default {
       //pc端处理的数组-展开、收起
       noresponelistMid:[],
       checkUserAll: false,
+      //数据下发
+      checkxfAll: false,
       checkRequireAll: false,
+      //批量用户
       dataUser:[],
       dataNeed:[],
+      dataxf:[],
       checkedUsers:[],
+      checkedxf:[],
       checkedRequires:[],
       ifbatchReviewShow:false,
       ifbatchIndexShow:false,
+      ifbatchxfShow:false,
       toIndeterminate: false,
+      //数据下发
+      xfIndeterminate: false,
       isIndeterminate: false,
       isEdit:true,
+      isxfEdit:true,
       isMeit:true,
       aonShow:false,
       bonShow:false,
@@ -734,6 +949,7 @@ export default {
       donShow:false,
       batchReviewVisible:false,
       batchIndexVisible: false,
+      batchxfVisible: false,
       succeed:false,
       failure:false,
       approvalResult:"A",

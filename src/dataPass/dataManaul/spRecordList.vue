@@ -19,7 +19,7 @@
           >
         </flexbox-item>
         <flexbox-item :span="1" v-if="dataList.length">
-          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(170, 23, 23);
+          <div style="display:block;height:0.4rem;width: 0.4rem; background:rgb(247, 37, 37);
             color:#fff;border-radius: 50%;margin-top: -0.07rem;" >
             <b style="padding:0.07rem 0.06rem 0.05rem 0.055rem;font-size: 0.25rem;display: block;text-align: center;">{{dataList.length}}</b>
           </div>
@@ -58,7 +58,7 @@
           </flexbox-item>
         </flexbox>
       </div>
-      <div v-show="manualStatus" class="nodatacss minFontSizemid" v-else>暂无数据</div>
+      <div v-show="recordStatus" class="nodatacss minFontSizemid" v-else>暂无数据</div>
     </template>
     <template v-else>
       <flexbox
@@ -188,6 +188,10 @@ export default {
     },
     dataRecordStatus: {
       type: String,
+      default: "",
+    },
+    approveStatus: {
+      type: [Boolean,Number],
       default: "",
     },
     isAssistant: {

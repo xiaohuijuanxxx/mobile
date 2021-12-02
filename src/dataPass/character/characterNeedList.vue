@@ -54,7 +54,7 @@ export default {
       type: Array,
     },
     tRequireStatus: {
-      type: Boolean,
+      type: [Boolean,Number],
       default: false,
     }
   },
