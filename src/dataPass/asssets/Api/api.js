@@ -95,6 +95,12 @@ let api= {
     getAllRole: `${host}/uaa/role/getAll`, // 获取所有角色
     getCharacterAllData: `${host}/portal/portalQa/portalQaDefine/getAllApproveList`, // 获取特色需求所有节点数据list（即部门审批、接口人审批、处理人审批列表数据总和）
     // 特色下发申请 相关接口
+
+    //数据下发批量审批--总行接口人
+    characterIssueInterfaceDealBatch: `${host}/portal/dwpDataApply/dwpDataManage/batchDeal`,
+    //数据下发批量审批--领导审批
+    characterIssueHandlerDealBatch: `${host}/portal/dwpDataApply/dwpDataDeal/batchDeal`,
+
     getCharacterIssueApplyInfo: `${host}/uaa/user/getByName`, // 特色下发流程 申请人个人信息
     getCharacterIssueApplyMsg: `${host}/portal/dwpDataApply/dwpDataApplyDefine/getOne`, //  特色下发流程 申请时填写的信息
     getCharacterIssueAllData: `${host}/portal/dwpDataApply/dwpDataApplyDefine/getMobileApproveList`, // 特色下发流程 所有节点数据list（即部门审批、总行接口人审批、处理人审批列表数据总和）

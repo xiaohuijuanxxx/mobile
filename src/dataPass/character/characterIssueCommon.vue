@@ -73,7 +73,7 @@
         v-model="dataForm.dwpDataContext"
         readonly
         :style='fourBan'
-        :rows='judgeLength(dataForm.dwpDataContext, dwpDataContext) ? dataForm.dwpDataContext.length/13 : fourBanRows'
+        :rows='judgeLength(dataForm.dwpDataContext) ? dataForm.dwpDataContext.length/13 : fourBanRows'
         :class="[dataForm.dwpDataContext.length > 13 ? 'duiqi-between' : '','label_color','special-hei'] "
       ></x-textarea>
       <x-input
@@ -341,11 +341,10 @@ export default {
     },
     // 获取用户申请时填写的信息
     getApplyMsg() {
-      console.log('------------------------------getApplyMsg:start')
       const params = { portalQaId: this.$route.query.dwpDataId };
       ajaxGet(URL.url.getCharacterIssueApplyMsg, params)
         .then((res) => {
-          console.log('------------------------------getApplyMsg:data')
+          console.log('-------',res);
           if (res.data.data != null && res.data.data != "") {
             this.getApplyInfo(res.data.data.createUser);
             let {
@@ -381,7 +380,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.error('---------------------------getApplyMsg:error', error)
+          console.log('---------------------------getApplyMsg:error', error)
           let omsg = this.outmsg(error);
           if (!omsg) {
             return;

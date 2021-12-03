@@ -260,7 +260,7 @@
           <x-icon v-show="!dataDownStatus" type="ios-arrow-down"></x-icon>
           <x-icon v-show="dataDownStatus" type="ios-arrow-up"></x-icon>
         </flexbox-item>
-        <flexbox-item :span="2.5" style="margin-bottom:0.1rem">
+        <flexbox-item :span="2.5" style="margin-top:-0.1rem">
             <x-button mini style="background:#fff;color:#E64340" v-if="ifbatchxfShow"  @click.native="toxfEdit">批量处理</x-button>
         </flexbox-item>
         <flexbox-item :span="1" v-if="dataDownlist.length">
@@ -274,20 +274,7 @@
     </div>
     <!-- 批量审批的时候flexbox -->
     <div v-show="!xfBatchEdit">
-       <flexbox class="appfirstboxt" style="padding-top:0.1rem">
-        <el-checkbox class="my-el-checkbox" :indeterminate="xfIndeterminate" v-model="checkxfAll" style="position:relative;">
-          <div
-                  style="
-                    position: absolute;
-                    left: -6px;
-                    top: -3px;
-                    width:30px;
-                    height:10vh;
-                    z-index: 99;
-                  "
-                  @click="handleCheckxfAllChange"
-                ></div>
-        </el-checkbox>
+       <flexbox class="appfirstboxt" >
         <flexbox-item :span="5">
             <div><span class="midFontSize">数据下发审批</span></div>
         </flexbox-item>
@@ -298,10 +285,11 @@
             <x-button mini style="background:#fff;color:#656565;" @click.native="toxfEdit">取消</x-button>  
         </flexbox-item>
       </flexbox>
-      <template v-if="xflist.length">
+      <template v-if="dataDownlist.length">
           <div class="parent">
             <el-checkbox-group v-model="checkedxf" >
-              <el-checkbox v-for="item in xflist" :label="item.dwpDataId" :key="item.dwpDataId" :disabled="checkboxxf(item)" class="appfirstbox" style="position:relative;">
+              <el-checkbox v-for="item in dataDownlist" :label="item.dealId" :key="item.dealId" :disabled="checkboxxf(item)" class="appfirstbox" style="position:relative;"
+              @change="setCheckMyselfxf(item, dataDownlist)">
                   <div
                   style="
                     position: absolute;
@@ -311,8 +299,7 @@
                     bottom:2px;
                     z-index: 99;
                   "
-                  @click="setCheckMyselfxf(item.dwpDataId)"
-                ></div>
+                ></div><!--@click="setCheckMyselfxf(item)"-->
                   <div style="display:flex;">
                     <div style="width:1.2rem;">
                         <img v-if='item.mxUserInfo' class="img" :src="item.mxUserInfo.avatarUrl" />
@@ -336,7 +323,7 @@
         <popup v-model="batchxfVisible" :hide-on-blur="false">
           <popup-header left-text="取消" right-text="确定" title="请选择" :show-bottom-border="false" @on-click-left="batchxfVisible=false" @on-click-right="rightxfSubmit"></popup-header>
           <group gutter="0">
-            <radio :options="selectlist" v-model="approvalResult"></radio>
+            <radio :options="dwpselectlist" v-model="dwpResult"></radio>
           </group>
         </popup>
       </div>
@@ -470,13 +457,49 @@ export default {
       })
     },
     // CheckBox选中数据下发审批
-    setCheckMyselfxf(item) {
-      let linshi = this.dataxf.slice(0)
-      this.checkedxf = setCheckMyselves(item, this.checkedxf);
-      this.dataxf = linshi
-      setTimeout(() => {
-        this.handleCheckedxfChange(this.checkedxf)
-      })
+    setCheckMyselfxf(item, list) {
+      if(this.checkedxf.length == 0){
+        this.dataType = 0;
+        this.checkboxxf(item);
+        this.dwpDataIds = [];
+        this.dwpStatus = '';
+        this.dwpLevel = '';
+        this.dwpType = [];
+      }
+      //第一次选择
+      if(this.checkedxf.length == 1){
+        if(item.dwpDataManageStatus && item.dwpDataManageStatus == '5'){
+          this.dataType = 1;
+        } else if(item.dwpDataDealLevel && item.dwpDataDealLevel == '2'){
+          this.dataType = 2;
+        }
+        list.some((e)=>{
+          if(e.dealId == this.checkedxf){
+            this.dwpDataIds = [];
+            this.dwpType = [];
+            this.dwpDataIds.push(item.dwpDataId);
+            this.dwpStatus = e.dwpDataManageStatus || e.dwpDataDealStatus;
+            this.dwpLevel = e.dwpDataDealLevel || '';
+            e.dwpDataDealType ? this.dwpType.push(e.dwpDataDealType) : '';
+            this.dwpName = JSON.parse(sessionStorage.getItem('currentUser')).username;
+            this.checkboxxf(item);
+          }
+        })
+      }else{//选择过
+        this.dwpDataIds = [];
+        this.dwpType = [];
+        for(let i=0; i<this.checkedxf.length; i++){
+          list.some((a)=>{
+            if(a.dealId == this.checkedxf[i]){
+              this.dwpDataIds.push(a.dwpDataId);
+              this.dwpType.push(a.dwpDataDealType);
+            }
+          })
+        }
+      }
+
+      //checkedbox key绑定的是dealid
+      // this.checkedxf = setCheckMyselves(item.dealId, this.checkedxf);
     },
     // 把特色需求、下发的不能在移动端处理问题放进来
     setCharacterNotMobile() {
@@ -619,7 +642,6 @@ export default {
         this.xfBatchEdit = !this.xfBatchEdit;
         if (this.xfBatchEdit) {
           this.checkedxf = []
-          this.checkxfAll = false;
           this.dataDownStatus = false;
           this.dataDownlistMid = [];
         }
@@ -668,22 +690,10 @@ export default {
         this.checkedUsers =val?this.dataUser:[];
         this.toIndeterminate= false;
       },
-      //数据下发批量审批
-      handleCheckxfAllChange(){
-        this.checkxfAll = !this.checkxfAll
-        let val = this.checkxfAll
-        this.checkedxf =val?this.dataxf:[];
-        this.xfIndeterminate= false;
-      },
       handleCheckedUsersChange(value) {
         let checkedUserCount = value.length;
         this.checkUserAll = checkedUserCount ===this.dataUser.length;
         this.toIndeterminate = checkedUserCount > 0 && checkedUserCount <this.dataUser.length;
-      },
-      handleCheckedxfChange(value) {
-        let checkedxfCount = value.length;
-        this.checkxfAll = checkedxfCount ===this.dataxf.length;
-        this.xfIndeterminate = checkedxfCount > 0 && checkedxfCount <this.dataxf.length;
       },
       rightReviewSubmit(){
         let data={ applyIds:JSON.stringify(this.checkedUsers),
@@ -710,19 +720,42 @@ export default {
         })
       },
       rightxfSubmit(){
-        let data={ dwpDataId:JSON.stringify(this.checkedxf),
-                  'username':JSON.parse(sessionStorage.getItem('currentUser')).username,
-	                'approvalResult': this.approvalResult
-                  };        
-        ajaxPost(URL.url.batchReview1xxxxx,JSON.stringify(data)).then(res => {
+        let data = {};
+        let url = '';
+        if(this.dataType == 1){
+          url = URL.url.characterIssueInterfaceDealBatch;
+          data = { 
+            dwpDataIds:JSON.stringify(this.dwpDataIds),
+            dwpDataManageUser:this.dwpName,
+            dwpDataManageStatus: this.dwpStatus,
+            dwpDataManageResult: this.dwpResult,
+          }; 
+        }else if(this.dataType == 2){
+          url = URL.url.characterIssueHandlerDealBatch;
+          data = { 
+            dwpDataDealIds:JSON.stringify(this.checkedxf),
+            dwpDataIds:JSON.stringify(this.dwpDataIds),
+            dwpDataDealUser:this.dwpName,
+            dwpDataDealStatus: this.dwpStatus,
+            dwpDataDealResult: this.dwpResult,
+            dwpDataDealLevel: this.dwpLevel,
+            dwpDataDealType: JSON.stringify(this.dwpType),
+          }; 
+        }
+        console.log(url, data);
+        ajaxPost(url, JSON.stringify(data)).then(res => {
           this.batchxfVisible = false
-          this.xfIndeterminate= false
+          this.xfBatchEdit = true;
           this.checkedxf=[]
-          this.getxfdata()
+          this.$nextTick(()=>{
+            this.getxfdata()
+          })
           this.succeed=true
+          this.dwpStatus = '1';
+          this.dataType = 0;
           this.sheet("提交成功")
-          this.tRequirementlistMid = [];
-          this.tRequireStatus = [];
+          this.dataDownlistMid = [];
+          this.dataDownStatus = '';
         }).catch(error => {
           let omsg=this.outmsg(error)
             this.closeloading()
@@ -741,9 +774,13 @@ export default {
         }
       },
       checkboxxf(row) {
-        if (row.dwpDataManageStatus === '5') {
+        if(this.dataType ==1 && row.dwpDataManageStatus && row.dwpDataManageStatus == '5'){
           return false
-        } else {
+        }else if(this.dataType ==2 && row.dwpDataDealLevel && row.dwpDataDealLevel == '2'){
+          return false
+        }else if(this.dataType ==0 && (row.dwpDataManageStatus === '5' || row.dwpDataDealLevel == '2')){
+          return false
+        }else {
           return true
         }
       },
@@ -790,9 +827,9 @@ export default {
       xfShow(data) {
         let tran = 'no'; //no 不显示  yes 显示
         data.forEach(res => {
-          if (res.dwpDataManageStatus == '5') {
-              tran = 'yes'           
-              this.dataxf.push(res.dwpDataId)            
+          //总行接口人复核或者领导审批
+          if (res.dwpDataManageStatus == '5' || res.dwpDataDealLevel == '2') {
+              tran = 'yes'                 
           }
         })
         if( tran == 'yes'){
@@ -864,12 +901,13 @@ export default {
           roles: signs,
           isTodo: 'N'
         };
+        console.log(parmas);
         ajaxGet(URL.url.getCharacterIssueAllData,parmas).then(res=> {
+          console.log(res);
           let {data:{data,code}}=res
           let recordsdata = that.changephotos(data)
-          that.xflist = recordsdata;
-          console.log(that.xflist)
-          that.xfShow(that.xflist)
+          that.dataDownlist = recordsdata;
+          that.xfShow(that.dataDownlist)
         }).catch((error) => {
           this.sheet(error);
         });
@@ -884,6 +922,8 @@ export default {
   },
   data () {
     return {
+      //数据下发可选类型
+      dataType:0,
       //数据下发是否可以批量审批
       xfBatchEdit:true,
       backoptions: {
@@ -924,21 +964,28 @@ export default {
       noresponelistMid:[],
       checkUserAll: false,
       //数据下发
-      checkxfAll: false,
       checkRequireAll: false,
       //批量用户
       dataUser:[],
       dataNeed:[],
-      dataxf:[],
       checkedUsers:[],
+      //数据下发选择的id数组 dwpDataDealIds
       checkedxf:[],
+      dwpDataIds:[],
+      //数据下发批量审批意见
+      dwpResult:'1',
+      dwpselectlist:[{key:"1", value: '同意'}, {key: "0", value: '退回'}],
+      dwpStatus:'',
+      dwpName:'',
+      dwpLevel:'',
+      dwpType:[],
+
       checkedRequires:[],
       ifbatchReviewShow:false,
       ifbatchIndexShow:false,
       ifbatchxfShow:false,
       toIndeterminate: false,
       //数据下发
-      xfIndeterminate: false,
       isIndeterminate: false,
       isEdit:true,
       isxfEdit:true,
