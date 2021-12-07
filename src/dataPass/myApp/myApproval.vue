@@ -289,17 +289,19 @@
           <div class="parent">
             <el-checkbox-group v-model="checkedxf" >
               <el-checkbox v-for="item in dataDownlist" :label="item.dealId" :key="item.dealId" :disabled="checkboxxf(item)" class="appfirstbox" style="position:relative;"
-              @change="setCheckMyselfxf(item, dataDownlist)">
+              ><!--@change="setCheckMyselfxf(item, dataDownlist)"-->
                   <div
                   style="
                     position: absolute;
-                    width: 0.5rem;
+                    width: 100%;
                     left: 0;
                     top: 2px;
                     bottom:2px;
                     z-index: 99;
                   "
-                ></div><!--@click="setCheckMyselfxf(item)"-->
+                  v-show="!checkboxxf(item)"
+                  @click="setCheckMyselfxf(item, dataDownlist)"
+                ></div><!---->
                   <div style="display:flex;">
                     <div style="width:1.2rem;">
                         <img v-if='item.mxUserInfo' class="img" :src="item.mxUserInfo.avatarUrl" />
@@ -449,6 +451,7 @@ export default {
     },
     // CheckBox选中用户审批
     setCheckMyselfUser(item) {
+      console.log(item);
       let linshi = this.dataUser.slice(0)
       this.checkedUsers = setCheckMyselves(item, this.checkedUsers);
       this.dataUser = linshi
@@ -458,6 +461,8 @@ export default {
     },
     // CheckBox选中数据下发审批
     setCheckMyselfxf(item, list) {
+      this.checkedxf = setCheckMyselves(item.dealId, this.checkedxf);
+      // console.log(item, list, this.checkedxf.length);
       if(this.checkedxf.length == 0){
         this.dataType = 0;
         this.checkboxxf(item);
@@ -624,294 +629,294 @@ export default {
       }
     },
     //用户审批
-     ifShow(data) {
-        let oran = 'no';   //no 不显示  yes 显示
-        data.forEach(res => {
-          if ((res.node === '3' || res.node === '4') && res.approveStatus === '1') {
-            oran = 'yes';
-            this.dataUser.push(res.applyId)
-          }
+    ifShow(data) {
+      let oran = 'no';   //no 不显示  yes 显示
+      data.forEach(res => {
+        if ((res.node === '3' || res.node === '4') && res.approveStatus === '1') {
+          oran = 'yes';
+          this.dataUser.push(res.applyId)
+        }
+      })
+      if( oran == 'yes'){
+        this.ifbatchReviewShow = true
+      }else{
+        this.ifbatchReviewShow = false
+      }
+    },
+    toxfEdit(){
+      this.xfBatchEdit = !this.xfBatchEdit;
+      if (this.xfBatchEdit) {
+        this.checkedxf = []
+        this.dataDownStatus = false;
+        this.dataDownlistMid = [];
+      }
+    },
+    toEdit(){
+      this.isEdit=!this.isEdit;
+      if (this.isEdit) {
+        this.checkedUsers = []
+        this.checkUserAll = false
+        this.userStatus = false;
+        this.userlistMid = [];
+      }
+    },
+    showPlugin() {
+      this.aonShow=false;
+      this.donShow = false
+      if (this.checkedUsers.length === 0) {
+        this.aonShow=true;
+        this.sheet('至少选择一条数据')
+      } else if (this.checkedUsers.length > 0) {
+        this.donShow = true 
+        this.sheet('用户审批可能涉及客户敏感信息的查询及导出，确定进行批量审批吗？')
+      }
+    },
+    //数据下发点击批量审批
+    showxfPlugin() {
+      this.aonShow=false;
+      this.donShow = false
+      if (this.checkedxf.length === 0) {
+        this.aonShow=true;
+        this.sheet('至少选择一条数据')
+      } else if (this.checkedxf.length > 0) {
+        this.donShow = true 
+        this.sheet('确定对数据下发进行批量审批吗？')
+      }
+    },
+    toConfirm() {
+      this.batchReviewVisible = true;
+    },
+    xfConfirm() {
+      this.batchxfVisible = true;
+    },
+    handleCheckUserAllChange() {
+      this.checkUserAll = !this.checkUserAll
+      let val = this.checkUserAll
+      this.checkedUsers =val?this.dataUser:[];
+      this.toIndeterminate= false;
+    },
+    handleCheckedUsersChange(value) {
+      let checkedUserCount = value.length;
+      this.checkUserAll = checkedUserCount ===this.dataUser.length;
+      this.toIndeterminate = checkedUserCount > 0 && checkedUserCount <this.dataUser.length;
+    },
+    rightReviewSubmit(){
+      let data={ applyIds:JSON.stringify(this.checkedUsers),
+                'username':JSON.parse(sessionStorage.getItem('currentUser')).username,
+                'approvalResult': this.approvalResult
+                };        
+      ajaxPost(URL.url.batchReview1,JSON.stringify(data)).then(res => {
+        this.batchReviewVisible = false
+        this.toIndeterminate= false
+        this.checkedUsers=[]
+        this.getTable1()
+        this.succeed=true
+        this.sheet("提交成功");
+        this.userlistMid = [];
+        this.userStatus = false;
+      }).catch(error => {
+        let omsg=this.outmsg(error)
+          this.closeloading()
+            if(!omsg){
+              return
+            }
+          this.actionSheetVisable=true
+          this.sheet(omsg)
+      })
+    },
+    rightxfSubmit(){
+      let data = {};
+      let url = '';
+      if(this.dataType == 1){
+        url = URL.url.characterIssueInterfaceDealBatch;
+        data = { 
+          dwpDataIds:JSON.stringify(this.dwpDataIds),
+          dwpDataManageUser:this.dwpName,
+          dwpDataManageStatus: this.dwpStatus,
+          dwpDataManageResult: this.dwpResult,
+        }; 
+      }else if(this.dataType == 2){
+        url = URL.url.characterIssueHandlerDealBatch;
+        data = { 
+          dwpDataDealIds:JSON.stringify(this.checkedxf),
+          dwpDataIds:JSON.stringify(this.dwpDataIds),
+          dwpDataDealUser:this.dwpName,
+          dwpDataDealStatus: this.dwpStatus,
+          dwpDataDealResult: this.dwpResult,
+          dwpDataDealLevel: this.dwpLevel,
+          dwpDataDealType: JSON.stringify(this.dwpType),
+        }; 
+      }
+      console.log(url, data);
+      ajaxPost(url, JSON.stringify(data)).then(res => {
+        this.batchxfVisible = false
+        this.xfBatchEdit = true;
+        this.checkedxf=[]
+        this.$nextTick(()=>{
+          this.getxfdata()
         })
-        if( oran == 'yes'){
-          this.ifbatchReviewShow = true
-        }else{
-          this.ifbatchReviewShow = false
-        }
-      },
-      toxfEdit(){
-        this.xfBatchEdit = !this.xfBatchEdit;
-        if (this.xfBatchEdit) {
-          this.checkedxf = []
-          this.dataDownStatus = false;
-          this.dataDownlistMid = [];
-        }
-      },
-      toEdit(){
-        this.isEdit=!this.isEdit;
-        if (this.isEdit) {
-          this.checkedUsers = []
-          this.checkUserAll = false
-          this.userStatus = false;
-          this.userlistMid = [];
-        }
-      },
-      showPlugin() {
-        this.aonShow=false;
-        this.donShow = false
-        if (this.checkedUsers.length === 0) {
-          this.aonShow=true;
-          this.sheet('至少选择一条数据')
-        } else if (this.checkedUsers.length > 0) {
-          this.donShow = true 
-          this.sheet('数据需求可能涉及客户敏感信息的查询及导出，确定进行批量审批吗？')
-        }
-      },
-      //数据下发点击批量审批
-      showxfPlugin() {
-        this.aonShow=false;
-        this.donShow = false
-        if (this.checkedxf.length === 0) {
-          this.aonShow=true;
-          this.sheet('至少选择一条数据')
-        } else if (this.checkedxf.length > 0) {
-          this.donShow = true 
-          this.sheet('确定对数据下发进行批量审批吗？')
-        }
-      },
-      toConfirm() {
-        this.batchReviewVisible = true;
-      },
-      xfConfirm() {
-        this.batchxfVisible = true;
-      },
-      handleCheckUserAllChange() {
-        this.checkUserAll = !this.checkUserAll
-        let val = this.checkUserAll
-        this.checkedUsers =val?this.dataUser:[];
-        this.toIndeterminate= false;
-      },
-      handleCheckedUsersChange(value) {
-        let checkedUserCount = value.length;
-        this.checkUserAll = checkedUserCount ===this.dataUser.length;
-        this.toIndeterminate = checkedUserCount > 0 && checkedUserCount <this.dataUser.length;
-      },
-      rightReviewSubmit(){
-        let data={ applyIds:JSON.stringify(this.checkedUsers),
-                  'username':JSON.parse(sessionStorage.getItem('currentUser')).username,
-	                'approvalResult': this.approvalResult
-                  };        
-        ajaxPost(URL.url.batchReview1,JSON.stringify(data)).then(res => {
-          this.batchReviewVisible = false
-          this.toIndeterminate= false
-          this.checkedUsers=[]
-          this.getTable1()
-          this.succeed=true
-          this.sheet("提交成功");
-          this.userlistMid = [];
-          this.userStatus = false;
-        }).catch(error => {
-          let omsg=this.outmsg(error)
-            this.closeloading()
-              if(!omsg){
-                return
-              }
-            this.actionSheetVisable=true
-            this.sheet(omsg)
-        })
-      },
-      rightxfSubmit(){
-        let data = {};
-        let url = '';
-        if(this.dataType == 1){
-          url = URL.url.characterIssueInterfaceDealBatch;
-          data = { 
-            dwpDataIds:JSON.stringify(this.dwpDataIds),
-            dwpDataManageUser:this.dwpName,
-            dwpDataManageStatus: this.dwpStatus,
-            dwpDataManageResult: this.dwpResult,
-          }; 
-        }else if(this.dataType == 2){
-          url = URL.url.characterIssueHandlerDealBatch;
-          data = { 
-            dwpDataDealIds:JSON.stringify(this.checkedxf),
-            dwpDataIds:JSON.stringify(this.dwpDataIds),
-            dwpDataDealUser:this.dwpName,
-            dwpDataDealStatus: this.dwpStatus,
-            dwpDataDealResult: this.dwpResult,
-            dwpDataDealLevel: this.dwpLevel,
-            dwpDataDealType: JSON.stringify(this.dwpType),
-          }; 
-        }
-        console.log(url, data);
-        ajaxPost(url, JSON.stringify(data)).then(res => {
-          this.batchxfVisible = false
-          this.xfBatchEdit = true;
-          this.checkedxf=[]
-          this.$nextTick(()=>{
-            this.getxfdata()
-          })
-          this.succeed=true
-          this.dwpStatus = '1';
-          this.dataType = 0;
-          this.sheet("提交成功")
-          this.dataDownlistMid = [];
-          this.dataDownStatus = '';
-        }).catch(error => {
-          let omsg=this.outmsg(error)
-            this.closeloading()
-              if(!omsg){
-                return
-              }
-            this.actionSheetVisable=true
-            this.sheet(omsg)
-        })
-      },
-      checkboxT(row) {
-        if (row.approveStatus === '1' && (row.node === '3' || row.node === '4')) {
-          return false
-        } else {
-          return true
-        }
-      },
-      checkboxxf(row) {
-        if(this.dataType ==1 && row.dwpDataManageStatus && row.dwpDataManageStatus == '5'){
-          return false
-        }else if(this.dataType ==2 && row.dwpDataDealLevel && row.dwpDataDealLevel == '2'){
-          return false
-        }else if(this.dataType ==0 && (row.dwpDataManageStatus === '5' || row.dwpDataDealLevel == '2')){
-          return false
-        }else {
-          return true
-        }
-      },
+        this.succeed=true
+        this.dwpStatus = '1';
+        this.dataType = 0;
+        this.sheet("提交成功")
+        this.dataDownlistMid = [];
+        this.dataDownStatus = '';
+      }).catch(error => {
+        let omsg=this.outmsg(error)
+          this.closeloading()
+            if(!omsg){
+              return
+            }
+          this.actionSheetVisable=true
+          this.sheet(omsg)
+      })
+    },
+    checkboxT(row) {
+      if (row.approveStatus === '1' && (row.node === '3' || row.node === '4')) {
+        return false
+      } else {
+        return true
+      }
+    },
+    checkboxxf(row) {
+      if(this.dataType ==1 && row.dwpDataManageStatus && row.dwpDataManageStatus == '5'){
+        return false
+      }else if(this.dataType ==2 && row.dwpDataDealLevel && row.dwpDataDealLevel == '2'){
+        return false
+      }else if(this.dataType ==0 && (row.dwpDataManageStatus === '5' || row.dwpDataDealLevel == '2')){
+        return false
+      }else {
+        return true
+      }
+    },
 
-      // 需求审批
-      toMeit(){
-        this.isMeit=!this.isMeit;
-        if (this.isMeit) {
-          this.checkedRequires = []
-          this.checkRequireAll = false
-          this.requireStatus = false;
-          this.requirementlistMid = [];
+    // 需求审批
+    toMeit(){
+      this.isMeit=!this.isMeit;
+      if (this.isMeit) {
+        this.checkedRequires = []
+        this.checkRequireAll = false
+        this.requireStatus = false;
+        this.requirementlistMid = [];
+      }
+      
+    },
+    showFont(){
+      this.conShow = false;
+      this.bonShow=false;
+      if (this.checkedRequires.length ===0) {
+        this.bonShow=true;
+        this.sheet('至少选择一条数据')
+      } else if (this.checkedRequires.length>0) {
+        this.conShow = true
+        this.sheet('数据需求可能涉及客户敏感信息的查询及导出，确定进行批量审批吗？')
+      }
+    },
+    onConfirm () {
+      this.batchIndexVisible= true;
+    },
+    onShow(data) {
+      let tran = 'no'; //no 不显示  yes 显示
+      data.forEach(res => {
+        if (res.node == '5') {
+            tran = 'yes'           
+            this.dataNeed.push(res.requireId)            
         }
-        
-      },
-      showFont(){
-        this.conShow = false;
-        this.bonShow=false;
-        if (this.checkedRequires.length ===0) {
-          this.bonShow=true;
-          this.sheet('至少选择一条数据')
-        } else if (this.checkedRequires.length>0) {
-          this.conShow = true
-          this.sheet('数据需求可能涉及客户敏感信息的查询及导出，确定进行批量审批吗？')
+      })
+      if( tran == 'yes'){
+        this.ifbatchIndexShow = true
+      }else{
+        this.ifbatchIndexShow = false
+      }
+    },
+    xfShow(data) {
+      let tran = 'no'; //no 不显示  yes 显示
+      data.forEach(res => {
+        //总行接口人复核或者领导审批
+        if (res.dwpDataManageStatus == '5' || res.dwpDataDealLevel == '2') {
+            tran = 'yes'                 
         }
-      },
-      onConfirm () {
-        this.batchIndexVisible= true;
-      },
-      onShow(data) {
-        let tran = 'no'; //no 不显示  yes 显示
-        data.forEach(res => {
-          if (res.node == '5') {
-              tran = 'yes'           
-              this.dataNeed.push(res.requireId)            
-          }
-        })
-        if( tran == 'yes'){
-          this.ifbatchIndexShow = true
-        }else{
-          this.ifbatchIndexShow = false
-        }
-      },
-      xfShow(data) {
-        let tran = 'no'; //no 不显示  yes 显示
-        data.forEach(res => {
-          //总行接口人复核或者领导审批
-          if (res.dwpDataManageStatus == '5' || res.dwpDataDealLevel == '2') {
-              tran = 'yes'                 
-          }
-        })
-        if( tran == 'yes'){
-          this.ifbatchxfShow = true
-        }else{
-          this.ifbatchxfShow = false
-        }
-      },
-      checkboxF(row) {
-        if (row.node == '5') {
-          return false
-        } else {
-          return true
-        }
-      },
-      handleCheckNeedChange() {
-        this.checkRequireAll = !this.checkRequireAll
-        let val = this.checkRequireAll
-        this.checkedRequires =val?this.dataNeed:[];
-        this.isIndeterminate= false;
-      },
-      handleCheckedNeedChange(value) {  
-        let checkedNeedCount = value.length 
-        this.checkRequireAll = checkedNeedCount === this.dataNeed.length;
-        this.isIndeterminate = checkedNeedCount > 0 && checkedNeedCount <this.dataNeed.length;
-      },
-      rightIndexSubmit(){
-        let data={ requireIds:JSON.stringify(this.checkedRequires),
-                  'username':JSON.parse(sessionStorage.getItem('currentUser')).username,
-	                'approvalResult': this.approvalResult
-                  };  
-        ajaxPost(URL.url.batchReview2,JSON.stringify(data)).then(res => {
-          this.batchIndexVisible = false
-          this.isIndeterminate= false
-          this.getTable2() 
-          this.succeed=true
-          this.sheet("提交成功")
-          this.requirementlistMid = [];
-          this.requireStatus = false;
-        }).catch(error => {
-          let omsg=this.outmsg(error)
-            this.closeloading()
-              if(!omsg){
-                return
-              }
-            this.actionSheetVisable=true
-            this.sheet(omsg)
-        })
-      },
-      tobackpage() {
-          this.push('home')
-          this.$store.commit({
-            type: 'changepage',
-            pageindex: 2,
-          });
-      },
-      //获取数据下发列表数据
-      /**
-       * 如果数据中有接口人待复核的数据
-       * 那么批量审批
-       */
-      getxfdata(){
-        let that = this;
-        const signs = JSON.parse(sessionStorage.getItem('signs'))
-        const parmas = {
-          page: 1,
-          per_page: 9999,
-          userName: JSON.parse(sessionStorage.getItem('currentUser')).username,
-          roles: signs,
-          isTodo: 'N'
-        };
-        console.log(parmas);
-        ajaxGet(URL.url.getCharacterIssueAllData,parmas).then(res=> {
-          console.log(res);
-          let {data:{data,code}}=res
-          let recordsdata = that.changephotos(data)
-          that.dataDownlist = recordsdata;
-          that.xfShow(that.dataDownlist)
-        }).catch((error) => {
-          this.sheet(error);
+      })
+      if( tran == 'yes'){
+        this.ifbatchxfShow = true
+      }else{
+        this.ifbatchxfShow = false
+      }
+    },
+    checkboxF(row) {
+      if (row.node == '5') {
+        return false
+      } else {
+        return true
+      }
+    },
+    handleCheckNeedChange() {
+      this.checkRequireAll = !this.checkRequireAll
+      let val = this.checkRequireAll
+      this.checkedRequires =val?this.dataNeed:[];
+      this.isIndeterminate= false;
+    },
+    handleCheckedNeedChange(value) {  
+      let checkedNeedCount = value.length 
+      this.checkRequireAll = checkedNeedCount === this.dataNeed.length;
+      this.isIndeterminate = checkedNeedCount > 0 && checkedNeedCount <this.dataNeed.length;
+    },
+    rightIndexSubmit(){
+      let data={ requireIds:JSON.stringify(this.checkedRequires),
+                'username':JSON.parse(sessionStorage.getItem('currentUser')).username,
+                'approvalResult': this.approvalResult
+                };  
+      ajaxPost(URL.url.batchReview2,JSON.stringify(data)).then(res => {
+        this.batchIndexVisible = false
+        this.isIndeterminate= false
+        this.getTable2() 
+        this.succeed=true
+        this.sheet("提交成功")
+        this.requirementlistMid = [];
+        this.requireStatus = false;
+      }).catch(error => {
+        let omsg=this.outmsg(error)
+          this.closeloading()
+            if(!omsg){
+              return
+            }
+          this.actionSheetVisable=true
+          this.sheet(omsg)
+      })
+    },
+    tobackpage() {
+        this.push('home')
+        this.$store.commit({
+          type: 'changepage',
+          pageindex: 2,
         });
-      },
+    },
+    //获取数据下发列表数据
+    /**
+     * 如果数据中有接口人待复核的数据
+     * 那么批量审批
+     */
+    getxfdata(){
+      let that = this;
+      const signs = JSON.parse(sessionStorage.getItem('signs'))
+      const parmas = {
+        page: 1,
+        per_page: 9999,
+        userName: JSON.parse(sessionStorage.getItem('currentUser')).username,
+        roles: signs,
+        isTodo: 'N'
+      };
+      console.log(parmas);
+      ajaxGet(URL.url.getCharacterIssueAllData,parmas).then(res=> {
+        console.log(res);
+        let {data:{data,code}}=res
+        let recordsdata = that.changephotos(data)
+        that.dataDownlist = recordsdata;
+        that.xfShow(that.dataDownlist)
+      }).catch((error) => {
+        this.sheet(error);
+      });
+    },
   },
   mounted() {
     this.noresponelist=[]

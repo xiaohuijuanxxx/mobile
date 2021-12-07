@@ -5,8 +5,11 @@
         <group style="height:calc(100%-46px);position:fixed;width:100%;">
             <div style="position: relative;" class="cellright">
                 <X-switch title="推送通知" class="mySwi" v-model="noticeswitch" @on-change='changeswitch'></X-switch>
-                <img  slot='icon' class="checklog open" src='static/give_message.png'>
+                <img  slot='icon' class="checklog open" src='static/ico.png'>
             </div>
+            <cell title="字体设置" is-link @click.native="toSetFont" class="cellright">
+                <img  slot='icon' class="checklog" src='static/fresh_clear.png'>
+            </cell>
             <cell title="清理缓存" is-link @click.native="conShowing" class="cellright">
                 <img  slot='icon' class="checklog" src='static/fresh_clear.png'>
             </cell>
@@ -40,7 +43,8 @@
             preventGoBack: true,
             backText: '',
           },
-          noticeswitch:true
+          noticeswitch:true,
+          font: null
         };
     },
       mounted() {
@@ -50,7 +54,8 @@
          ajaxGet(URL.url.usersiting,{keyWord:user.username}).then(res=>{
             let {data:{code,message,data}}=res
             if(code=='0000' && data != null){
-              this.noticeswitch=!!(Number(data[0].susPmPushMsg))
+              this.noticeswitch=!!(Number(data[0].susPmPushMsg));
+              this.font = Number(data[0].susSetting1)
             }
           }).catch(err=>{
             let omsg=this.outmsg(err)
@@ -81,6 +86,9 @@
         },
         toAboutus() {
           this.$router.push({ path: '/aboutUs' })
+        },
+        toSetFont(){
+          this.$router.push({path:'/setFont',query: {font: this.font}})
         },
         conShowing() {
           this.conShow=true
@@ -138,8 +146,9 @@
             height:0.54rem;width:0.56rem;top:-1px;
           }
           &:checked{
-            border-color: red;
-            background-color: red !important;
+            opacity: 0.8;
+            border-color: #e92323;
+            background-color: #e92323 !important;
           }
         }
         // /deep/ .weui-switch:checked{
