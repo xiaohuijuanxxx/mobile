@@ -8,6 +8,11 @@ import  { ToastPlugin, LoadingPlugin ,AlertPlugin,ConfirmPlugin} from 'vux';
 import setRemUnit from './core/utils/fontRes'
 import VueScroller from 'vue-scroller'
 
+import { Loading } from 'element-ui'
+
+Vue.use(Loading);
+Vue.use(Loading.directive); //指令方式
+
 import VConsole from 'vconsole';
 let vconsole = new VConsole();
 export default vconsole;

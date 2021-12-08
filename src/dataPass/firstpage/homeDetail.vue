@@ -101,7 +101,7 @@
             </div>
           </flexbox-item>
         </flexbox>
-        <flexbox style="margin-top: 0.6rem">
+        <flexbox style="margin-top: 0.6rem" v-loading="isUpdate">
           <swiper
             auto
             loop
@@ -258,6 +258,7 @@ export default {
   mixins: [minxin],
   data() {
     return {
+      isUpdate: true,
       isLoadding: 0, // 0还没下拉 1 下拉中
       pulldown: true, // 开启下拉刷新监听
       listenScroll: true, // 开启滚动监听
@@ -330,15 +331,15 @@ export default {
     },
   },
   created() {
-    this.getBannerList();
-    //this.loadData()
-    if (this.bannerList != "") {
-        for (let i = 0; i < this.bannerList.length; i++) {
-            // this.swiperlist.push(this.bannerList[i]);
-            this.data = this.bannerList
-        }
-        //this.$forceUpdate()
-    }
+    // this.getBannerList();
+    // //this.loadData()
+    // if (this.bannerList != "") {
+    //     for (let i = 0; i < this.bannerList.length; i++) {
+    //         // this.swiperlist.push(this.bannerList[i]);
+    //         this.data = this.bannerList
+    //     }
+    //     //this.$forceUpdate()
+    // }
     let initpage = this.$store.state.requirednode;
     if (initpage) {
       this.push(initpage.pages);
@@ -440,27 +441,28 @@ export default {
     ]),
     // 轮播图
     getBannerList() {
-        ajaxGet(URL.url.getBanner)
-            .then((res) => {
-                if (
-                    res.data.data != null &&
-                    res.data.data != "null" &&
-                    res.data.data != ""
-                ) {
-                    const dt = res.data.data.filter((item) => item.isEnable === "Y");
-                    this.$store.commit({
-                        type: "setBannerList",
-                        data: dt,
-                    });
-                }
-            })
-            .catch((error) => {
-                const omsg = this.outmsg(error);
-                if (!omsg) {
-                    return;
-                }
-                this.sheet(omsg);
+      ajaxGet(URL.url.getBanner)
+      .then((res) => {
+          if (
+              res.data.data != null &&
+              res.data.data != "null" &&
+              res.data.data != ""
+          ) {
+            const dt = res.data.data.filter((item) => item.isEnable === "Y");
+            this.$store.commit({
+                type: "setBannerList",
+                data: dt,
             });
+            this.isUpdate = false
+          }
+      })
+      .catch((error) => {
+          const omsg = this.outmsg(error);
+          if (!omsg) {
+              return;
+          }
+          this.sheet(omsg);
+      });
     },
     // 设置头像
     setTouX() {

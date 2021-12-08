@@ -809,6 +809,7 @@ export default {
               }
             });
             _this.statelist = data;
+            console.log(_this.statelist);
             if(_this.statelist.length == 1){
               _this.flowm = `height:0.3rem;`;
             }else{
