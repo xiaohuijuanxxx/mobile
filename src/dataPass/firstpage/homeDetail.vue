@@ -86,8 +86,8 @@
           </flexbox-item>
         </flexbox>
         <flexbox style="padding-top: 1.1rem" :gutter="0">
-          <flexbox-item v-for="(i, index) in useData" :key="index">
-            <div class="flex-demo" @click="Skip(i.id)">
+          <flexbox-item v-for="(i, index) in useData" :key="index"  v-show="!isUpdate">
+            <div class="flex-demo" @click="Skip(i.id)" >
               <img slot="icon" class="rwdemo" :src="i.url" />
               <div class="appcationName userZy">{{ i.value }}</div>
             </div>
