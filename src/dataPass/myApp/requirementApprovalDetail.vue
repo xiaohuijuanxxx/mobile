@@ -118,8 +118,7 @@
         state='1'
         :class="{refuse : statelist[0].approveStatus == 3 ? true : false}"
         :title="
-          textRE(statelist[0].node) +
-          statelist[0].userId + '/' + statelist[0].userCode
+           textRE(statelist[0].node) + ` ${statelist[0].userId == '数据管理部' ? statelist[0].userId : statelist[0].userId + '/' + statelist[0].userCode}`
         "
         :is-done="!!(Number(statelist[0].approveStatus) > 1)"
         @click.native='resultContent(0)'
@@ -133,8 +132,7 @@
         state="2"
         :class="{refuse : statelist[1].approveStatus == 3 ? true : false}"
         :title="
-          textRE(statelist[1].node) +
-          statelist[1].userId + '/' + statelist[1].userCode
+           textRE(statelist[1].node) + ` ${statelist[1].userId == '数据管理部' ? statelist[1].userId : statelist[1].userId + '/' + statelist[1].userCode}`
         "
         :is-done="!!(Number(statelist[1].approveStatus) > 1)"
         @click.native='resultContent(1)'
