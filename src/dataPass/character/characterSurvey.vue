@@ -42,6 +42,7 @@
 import Header from "@/common/header.vue";
 import MyTextarea from "@/common/myTextarea.vue";
 import CharacterCommon from "../character/characterCommon";
+import { mapMutations } from 'vuex';
 
 import minxin from "@/common/commonfunction.js";
 import { ajaxGet, ajaxPost, ajaxtokenPost, hideWebViewTitle, closeWindow } from "../../core/mxApi";
@@ -77,6 +78,7 @@ export default {
     };
   },
   created() {
+    this.setTransitionName('slide-right')
     // 推送进来的
       let portalQaId = this.getquerystring('portalQaId')
       if (portalQaId && this.$route.query.hasOwnProperty('todoType')) {
@@ -90,6 +92,7 @@ export default {
     //
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 推送时底部弹框关闭并退出拉取jiemian
     tsClose() {
       closeWindow()
@@ -210,6 +213,7 @@ export default {
       const data = JSON.stringify(this.dealForm);
       ajaxPost(URL.url.getCharacterNeedDeptDeal, data)
         .then((res) => {
+          this.setTransitionName('')
           this.$router.push({ name: "approvalFinish" });
         })
         .catch((error) => {

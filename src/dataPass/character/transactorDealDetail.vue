@@ -66,6 +66,7 @@ import seclect from "@/common/seclect.vue";
 import { TransferDomDirective as TransferDom } from "vux";
 
 import minxin from "@/common/commonfunction.js";
+import { mapMutations } from 'vuex';
 import { ajaxGet, ajaxPost, ajaxtokenPost, hideWebViewTitle, closeWindow } from "../../core/mxApi";
 
 import Bus from "@/bus/bus";
@@ -114,6 +115,7 @@ export default {
     };
   },
   created() {
+    this.setTransitionName('slide-right')
     // 推送进来的
       let portalQaId = this.getquerystring('portalQaId')
       if (portalQaId && this.$route.query.hasOwnProperty('todoType')) {
@@ -126,6 +128,7 @@ export default {
     this.getDealMsg();
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 推送时底部弹框关闭并退出拉取jiemian
     tsClose() {
       closeWindow()
@@ -333,6 +336,7 @@ export default {
       const data = JSON.stringify(this.dealForm);
       ajaxPost(URL.url.getCharacterNeedTransactorDeal, data)
         .then((res) => {
+          this.setTransitionName('')
           this.$router.push({ name: "approvalFinish" });
         })
         .catch((error) => {

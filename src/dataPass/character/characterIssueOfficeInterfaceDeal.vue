@@ -103,8 +103,9 @@ import Header from "@/common/header.vue";
 import MyTextarea from "@/common/myTextarea.vue";
 import CharacterIssueCommon from "../character/characterIssueCommon";
 import seclect from "@/common/seclect.vue";
-import { TransferDomDirective as TransferDom } from "vux";
 
+import { TransferDomDirective as TransferDom } from "vux";
+import { mapMutations } from 'vuex';
 import minxin from "@/common/commonfunction.js";
 import {
   ajaxGet,
@@ -165,6 +166,7 @@ export default {
     };
   },
   created() {
+    this.setTransitionName('slide-right')
     this.mid = this.$route.query;
     if (this.$route.query.hasOwnProperty("todoType")) {
       sessionStorage.setItem('isTui', true)
@@ -176,6 +178,7 @@ export default {
   },
   mounted() {},
   methods: {
+    ...mapMutations(['setTransitionName']),
     resultBT(i){
       if(i){
         this.$vux.alert.show({
@@ -407,6 +410,7 @@ export default {
       const data = JSON.stringify(this.dealForm);
       ajaxPost(URL.url.characterIssueInterfaceDeal, data)
         .then((res) => {
+          this.setTransitionName('')
           this.$router.push({ name: "approvalFinish" });
         })
         .catch((error) => {

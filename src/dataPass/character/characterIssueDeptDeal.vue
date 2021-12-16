@@ -199,6 +199,7 @@ import MyTextarea from "@/common/myTextarea.vue";
 import CharacterIssueCommon from "../character/characterIssueCommon";
 import seclect from "@/common/seclect.vue";
 import { TransferDomDirective as TransferDom } from "vux";
+import { mapMutations } from 'vuex';
 
 import minxin from "@/common/commonfunction.js";
 import {
@@ -263,6 +264,7 @@ export default {
     };
   },
   created() {
+    this.setTransitionName('slide-right')
     if (this.$route.query.hasOwnProperty("todoType")) {
       hideWebViewTitle();
       sessionStorage.setItem("isTui", true);
@@ -279,6 +281,7 @@ export default {
   mounted() {
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 审批意见点击显示
     resultBT(i){
       if(i){
@@ -446,6 +449,7 @@ export default {
         const data = JSON.stringify(this.dealForm);
         ajaxPost(URL.url.characterIssueDeptDeal, data)
           .then((res) => {
+            this.setTransitionName('')
             this.$router.push({ name: "approvalFinish" });
           })
           .catch((error) => {
@@ -464,6 +468,7 @@ export default {
         };
         ajaxGet(URL.url.deptChangeDealPerson, params)
           .then((res) => {
+            this.setTransitionName('')
             this.$router.push({ name: "approvalFinish" });
           })
           .catch((error) => {

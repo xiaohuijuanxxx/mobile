@@ -126,6 +126,7 @@ import seclect from "@/common/seclect.vue";
 import { TransferDomDirective as TransferDom } from "vux";
 
 import minxin from "@/common/commonfunction.js";
+import { mapMutations } from 'vuex';
 import { ajaxGet, ajaxPost, ajaxtokenPost, hideWebViewTitle, closeWindow  } from "../../core/mxApi";
 
 import Bus from "@/bus/bus";
@@ -182,6 +183,7 @@ export default {
     };
   },
   created() {
+    this.setTransitionName('slide-right')
     if (this.$route.query.hasOwnProperty('todoType')) {
       sessionStorage.setItem('isTui', true)
         hideWebViewTitle()
@@ -194,6 +196,7 @@ export default {
     this.getResultList()
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 审批意见点击显示
     resultBT(i){
       if(i){
@@ -388,6 +391,7 @@ export default {
       const data = JSON.stringify(this.dealForm);
       ajaxPost(URL.url.characterIssueHandlerDeal, data)
         .then((res) => {
+          this.setTransitionName('')
           this.$router.push({ name: "approvalFinish" });
         })
         .catch((error) => {
@@ -402,6 +406,7 @@ export default {
       } else {
         const params = {dwpDataDealId: this.$route.query.dwpDataApproveId, userName: this.deptApproveUser}
         ajaxGet(URL.url.handlerChangeDealPerson, params).then((res) => {
+          this.setTransitionName('')
           this.$router.push({ name: "approvalFinish" });
         })
         .catch((error) => {
