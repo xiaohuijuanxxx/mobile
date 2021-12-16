@@ -383,7 +383,7 @@
 let URL=require('../asssets/Api/api')
 import { ajaxGet,ajaxPost } from '../../core/mxApi'
 import minxin from '@/common/commonfunction.js'
-import { mapState } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import { PopupHeader, Popup, TransferDom, Group, Radio } from 'vux'
 import Header from '@/common/header.vue'
 import { setCheckMyselves } from "@/common/commonfunction.js";
@@ -407,6 +407,7 @@ export default {
      ...mapState({
         characterSurveyNotMobile: state => state.characterSurveyNotMobile,
         characterIssueNotMobile: state => state.characterIssueNotMobile,
+        transitionName: state=> state.transitionName,
       }),
   },
   watch: {
@@ -414,9 +415,17 @@ export default {
       this.characterSurveyNotMobile.forEach(item => {
         this.noresponelist.push({id:item.id,userName:item.createName,requireName:item.portalQaTitle,mxUserInfo:item.mxUserInfo})
       })
-    }
+    },
+  },
+  beforeRouteLeave(to, from, next){
+    const routeDeep = ['/home', '/application']
+    const toDepth = routeDeep.indexOf(to.path) == -1 ? '' : 'slide-right'
+    // const fromDepth = routeDeep.indexOf(from.path)\
+    this.setTransitionName(toDepth)
+    next()
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     onOrOff(status, list, name1, name2){
       if(!status) this.turnOn(list, name1, name2);
       if(status) this.turnOff(list, name1, name2);
@@ -508,6 +517,7 @@ export default {
     },
     // 把特色需求、下发的不能在移动端处理问题放进来
     setCharacterNotMobile() {
+      // alert(this.characterIssueNotMobile.length)
       this.characterIssueNotMobile.forEach(item => {
         this.noresponelist.push({id:item.id,userName:item.createName,requireName:item.dwpDataApplyTitle,mxUserInfo:item.mxUserInfo})
       })
@@ -528,6 +538,7 @@ export default {
           let recordsdata=_this.changephotos(data)
           recordsdata.forEach(item=>{
             if(item.node == '5'){
+              // alert(_this.noresponelist.length)
               _this.noresponelist.push({id:item.id,userName:item.name,requireName:_this.gshw(item.applyType),mxUserInfo:item.mxUserInfo})
             }
           })
@@ -885,10 +896,11 @@ export default {
       })
     },
     tobackpage() {
+      //  this.$router.go(-1)
         this.push('home')
         this.$store.commit({
           type: 'changepage',
-          pageindex: 2,
+          pageindex: 0,
         });
     },
     //获取数据下发列表数据

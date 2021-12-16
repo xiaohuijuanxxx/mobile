@@ -331,6 +331,7 @@ export default {
     },
   },
   created() {
+    this.setTransitionName('')
     // this.getBannerList();
     // //this.loadData()
     // if (this.bannerList != "") {
@@ -438,6 +439,7 @@ export default {
       "setUseIds",
       "setUseData",
       "setUseList",
+      "setTransitionName",
     ]),
     // 轮播图
     getBannerList() {
