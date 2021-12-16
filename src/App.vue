@@ -9,35 +9,20 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 const URL=require('./dataPass/asssets/Api/api')
 import { ajaxGet } from './core/mxApi'
 export default {
   data() {
     return {
-      transitionName:''
+      // transitionName:''
     }
   },
-    // watch: {
-    //     '$route': {
-    //         // immediate:true,
-    //         handler(to,from) {
-    //             if(to.path=='/start') {
-    //                 this.$router.push('home')
-    //             }
-    //             console.log(to.meta, '-1111111')
-    //             // console.log(from.meta, '-000000000')
-    //             //如果to索引大于from索引,判断为前进状态,反之则为后退状态
-    //             if (to.meta && from.meta) {
-    //               if(to.meta.index > from.meta.index){
-    //             //设置动画名称
-    //               this.transitionName = 'slide-left';
-    //             }else{
-    //               this.transitionName = 'slide-right';
-    //             }
-    //             }
-    //         }
-    //     }
-    // }
+  computed:{
+    ...mapState({
+      transitionName: state=>state.transitionName
+    })
+  }
 }
 </script>
 <style lang='less'>
@@ -52,6 +37,57 @@ export default {
 }
 #app {
     height: 100%;
+}
+.slide-left-enter-active {
+    animation-name: slide-left-in;
+    animation-duration: .3s;
+}
+.slide-left-leave-active {
+    animation-name: slide-left-out;
+    animation-duration: .3s;
+}
+.slide-right-enter-active {
+    animation-name: slide-right-in;
+    animation-duration: .3s;
+}
+.slide-right-leave-active {
+    animation-name: slide-right-out;
+    animation-duration: .3s;
+}
+
+@keyframes slide-left-in {
+    0% {
+        transform: translate3d(100%, 0, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slide-left-out {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+@keyframes slide-right-in{
+    0% {
+        transform: translate3d(-100%, 0, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes slide-right-out  {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(100%, 0, 0);
+    }
 }
 .cjHeader{
   //padding-top:4.7vh !important;

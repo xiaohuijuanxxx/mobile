@@ -6,6 +6,7 @@ import { ajaxGet, ajaxPost } from '@/core/mxApi';
 Vue.use(Vuex)
 
 const state= {
+   transitionName:'',//右滑动画
    pageindex:null, //首页的第几个页面
    tabContent:null, //应用的第几个页面
    ssoToken:'',
@@ -28,6 +29,9 @@ const state= {
 }
 //同步提交
 const mutations={
+    setTransitionName(state, data){
+        state.transitionName=data
+    },
     setTabbarHeight(state,payload){
         state.tabbarHeight=payload.tabbarHeight
     },
