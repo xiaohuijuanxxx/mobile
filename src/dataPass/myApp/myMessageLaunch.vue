@@ -86,6 +86,17 @@
                             style="width: 86%"
                             src="static/title_picture.png"
                           />
+                          <!-- 用户头像 -->
+                          <!-- <img v-if="item.sendUserName.includes('admin')" style="width:86%;" 
+                          src="static/admin-logo.png"
+                           />
+                          <img
+                          v-else-if="item.mxUserInfo"
+                            style="width: 86%"
+                            :src="item.mxUserInfo.avatarUrl"
+                          />
+                          
+                          <img v-else style="width: 86%" src="static/title_picture.png" /> -->
                         </flexbox-item>
                         <flexbox-item class="myFlexItem">
                           <flexbox orient="vertical" :gutter="0">
@@ -305,6 +316,7 @@ import minxin from "@/common/commonfunction.js";
 import { setCheckMyselves } from "@/common/commonfunction.js";
 import Bus from "@/bus/bus";
 import BScroll from "better-scroll";
+import { mapMutations } from 'vuex';
 import Myscroll from "@/common/myscroll.vue";
 export default {
   components: {
@@ -352,6 +364,7 @@ export default {
     //this.watchScrollSend();
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
      // 右滑时
     swipeoutOpen(index) {
       if (index != this.slideMessageRcvId && this.slideMessageRcvId !== '') {
@@ -476,6 +489,7 @@ export default {
         });
     },
     gotoUserDetail(item) {
+      this.setTransitionName('')
       this.$router.push({ name: "messageLaunchDetail", params: { id: item } });
     },
     doDeleteClick(item) {

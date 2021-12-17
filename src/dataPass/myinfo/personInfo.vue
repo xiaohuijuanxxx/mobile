@@ -54,6 +54,7 @@
     import { url } from '../asssets/Api/api';
     import minxin from '@/common/commonfunction.js';
     import { ajaxGet, ajaxPost } from '../../core/mxApi';
+    import { mapMutations } from 'vuex';
     import Header from '@/common/header.vue'
     import Bus from '@/bus/bus';
     export default {
@@ -116,6 +117,7 @@
             }
         },
         methods: {
+            ...mapMutations(['setTransitionName']),
             // 可输入框 失去焦点
             textUnBlur(type) {
                 // 邮箱格式校验
@@ -272,6 +274,7 @@
                 });
             },
             tobackpage() {
+                this.setTransitionName('slide-right')
                 this.push('home')
             },
             toEdit() {

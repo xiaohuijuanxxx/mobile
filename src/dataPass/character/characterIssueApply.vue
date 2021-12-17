@@ -49,6 +49,7 @@ import minxin from "@/common/commonfunction.js";
 import CharacterIssueCommon from "../character/characterIssueCommon";
 import { ajaxGet, ajaxPost, ajaxtokenPost, hideWebViewTitle, closeWindow } from "../../core/mxApi";
 import Bus from "@/bus/bus";
+import { mapMutations } from 'vuex';
 
 const URL = require("../asssets/Api/api");
 export default {
@@ -80,6 +81,7 @@ export default {
       }
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     lookAll(i){
       if(i){
         this.$vux.alert.show({
@@ -211,6 +213,7 @@ export default {
           return;
       }
       // this.$router.push({ path: "/myApproval" });
+      this.setTransitionName('slide-right')
       this.$router.go(-1);
     },
     // 推送时底部弹框关闭并退出拉取jiemian

@@ -198,11 +198,12 @@ export default {
     };
   },
   methods: {
-
+    ...mapMutations(['setTransitionName']),
     back() {
         let index;
         let source = sessionStorage.getItem('source') || '';
         source == 'home' ? index=0 : index = 2;
+        this.setTransitionName('slide-right')
         this.push('home');
         this.$store.commit({
             type: 'changepage',
@@ -217,6 +218,7 @@ export default {
       let recordList = ["803","804","805"]
 
       if (row.todoType == '901') {
+        this.setTransitionName('')
         this.$router.push({path:'myMessage',query:{todoPara: row.todoPara,todoFlag: row.todoState, isZnzl : true}})
         return
       }
@@ -233,9 +235,11 @@ export default {
       // }
       if (allTypeList.indexOf(row.todoType) > -1) {
         // this.$emit("showreviewpage")
+        this.setTransitionName('')
         this.$router.push({path: 'reviewdetail', query: {todoPara: row.todoPara,todoState: row.todoState, todoType:  row.todoType}})
         //this.push("reviewdetail");
       }  else {
+        this.setTransitionName('')
         this.push("showdonelist");
       }
     },

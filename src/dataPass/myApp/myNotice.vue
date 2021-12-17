@@ -27,6 +27,7 @@
 
 <script>
 let URL=require('../asssets/Api/api')
+import { mapMutations } from 'vuex';
 import Header from "@/common/header.vue";
 import { ajaxGet,ajaxPost } from '../../core/mxApi'
 import minxin from '@/common/commonfunction.js'
@@ -52,9 +53,11 @@ export default {
     // this.touchMove(this.$refs.notice, 'home',this)
   },
   methods:{
+    ...mapMutations(['setTransitionName']),
     gotonoticedetail(row){
       let seData=JSON.stringify(row)
       sessionStorage.setItem('noticerow',seData)
+      this.setTransitionName('')
       this.$router.push('myNoticeDetail')
       // this.push('myNoticeDetail')
     },
@@ -86,6 +89,7 @@ export default {
       })
     },
     tobackpage() {
+      this.setTransitionName('slide-right')
       this.push('home')
           this.$store.commit({
             type: 'changepage',

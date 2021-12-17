@@ -7,6 +7,7 @@
 </template>
 <script>
 import Header from "@/common/header.vue";
+import { mapMutations } from 'vuex';
 import minxin from "@/common/commonfunction.js";
 import { ajaxGet, ajaxPost, ajaxtokenPost, hideWebViewTitle, closeWindow } from "../../core/mxApi";
 import Bus from "@/bus/bus";
@@ -38,6 +39,7 @@ export default {
       }
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
       // 返回
     back() {
       if (sessionStorage.getItem('isTui')) {
@@ -45,6 +47,7 @@ export default {
           return;
       }
       // this.$router.push({ path: "/myApproval" });
+      this.setTransitionName('slide-right')
       this.$router.go(-1)
     },
     // 推送时底部弹框关闭并退出拉取jiemian

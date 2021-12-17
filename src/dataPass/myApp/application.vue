@@ -162,6 +162,9 @@ export default {
       deep: true,
     },
   },
+  created() {
+    this.setTransitionName('')
+  },
   mounted() {
     this.tempUseDataList = this.useDataList.slice(0);
     this.tempUseData = this.useDataState.slice(0);
@@ -173,7 +176,7 @@ export default {
     PopupHeader
   },
   methods: {
-    ...mapMutations(['setUseData', 'setUseList']),
+    ...mapMutations(['setUseData', 'setUseList','setTransitionName']),
     Skip(id){
       if(id==1){
         this.$router.push({ path: '/myApproval' });

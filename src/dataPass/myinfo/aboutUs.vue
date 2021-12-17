@@ -12,6 +12,7 @@
 </template>
 
 <script>
+    import { mapMutations } from 'vuex';
     import { url } from '../asssets/Api/api';
     import { ajaxGet} from '../../core/mxApi';
     import minxin from '@/common/commonfunction.js';
@@ -42,7 +43,9 @@
         }
       },
       methods: {
+        ...mapMutations(['setTransitionName']),
         tobackpage() {
+          this.setTransitionName('slide-right')
           this.push('settings')
         },
         getAppVerson() {

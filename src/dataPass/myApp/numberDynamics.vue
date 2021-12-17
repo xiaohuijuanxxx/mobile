@@ -36,6 +36,7 @@ import Header from "@/common/header.vue";
 import minxin from "@/common/commonfunction.js";
 import { ajaxGet, ajaxPost } from "../../core/mxApi";
 import { Badge} from 'vux'
+import { mapMutations } from 'vuex';
 export default {
   mixins: [minxin],
   components: {
@@ -59,7 +60,9 @@ export default {
   mounted() {},
   destroyed() {},
   methods: {
+    ...mapMutations(['setTransitionName']),
     back() {
+      this.setTransitionName('slide-right')
       this.push("home");
       this.$store.commit({
         type: "changepage",
@@ -90,6 +93,7 @@ export default {
     },
     // 跳转到文档详情页
     toDetail(item) {
+      this.setTransitionName('')
       this.push({
         name: "knowledgeDetail",
         params: { kbfileId: item.kbfileId ,isNew: item.isNew},

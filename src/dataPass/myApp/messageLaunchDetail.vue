@@ -95,6 +95,7 @@
 
 <script>
 import minxin from '@/common/commonfunction.js'
+import { mapMutations } from 'vuex';
 import { Popup, Group} from 'vux'
 import { ajaxGet } from '../../core/mxApi';
 let URL = require("../asssets/Api/api");
@@ -126,12 +127,14 @@ export default {
         this.getTable()
     },
     methods:{
+        ...mapMutations(['setTransitionName']),
         tobackpage() {
             if (this.$route.query.hasOwnProperty("todoType")) {
                 closeWindow();
                 return;
                 //Bus.$emit('refesh')
             }
+            this.setTransitionName('slide-right')
             this.$router.push({ path: "/myMessage" });
             // this.push('myApproval')
         },

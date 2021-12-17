@@ -56,6 +56,7 @@
 <script>
 const URL = require("../asssets/Api/api");
 import minxin from "@/common/commonfunction.js";
+import { mapMutations } from 'vuex';
 import { ajaxGet, ajaxPost } from "../../core/mxApi";
 import { Badge} from 'vux'
 export default {
@@ -123,7 +124,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     back() {
+      this.setTransitionName('slide-right')
       this.push("home");
       this.$store.commit({
         type: "changepage",
@@ -206,11 +209,13 @@ export default {
     toDetail(item) {
       // 数据QA
       if (this.Qashow) {
+        this.setTransitionName('')
         this.push({
           name: "qaDetail",
           params: { qaShareId: item.qaShareId,isNew: item.isNew },
         });
       } else {
+        this.setTransitionName('')
         // 培训、制度
         this.push({
           name: "knowledgeDetail",

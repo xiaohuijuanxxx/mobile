@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    import { mapMutations } from 'vuex';
     import minxin from '@/common/commonfunction.js';
     import Header from '@/common/header.vue'
     export default {
@@ -84,7 +85,9 @@
         }
       },
       methods: {
+        ...mapMutations(['setTransitionName']),
         tobackpage() {
+          this.setTransitionName('slide-right')
           this.push('home')
         },
       },

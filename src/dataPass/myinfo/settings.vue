@@ -27,6 +27,7 @@
     let URL=require('../asssets/Api/api')
     import { XSwitch } from 'vux';
     import minxin from '../../common/commonfunction';
+    import { mapMutations } from 'vuex';
     import { ajaxGet,ajaxPost, closeWindow } from '../../core/mxApi';
     import Header from '@/common/header.vue'
     export default {
@@ -81,13 +82,17 @@
         }
       },
       methods: {
+        ...mapMutations(['setTransitionName']),
         tobackpage() {
+          this.setTransitionName('slide-right')
           this.push('home')
         },
         toAboutus() {
+          this.setTransitionName('')
           this.$router.push({ path: '/aboutUs' })
         },
         toSetFont(){
+          this.setTransitionName('')
           this.$router.push({path:'/setFont',query: {font: this.font}})
         },
         conShowing() {

@@ -195,6 +195,7 @@
 <script>
 import minxin from "@/common/commonfunction.js";
 import { judgeFileType } from "@/common/commonfunction.js";
+import { mapMutations } from 'vuex';
 import {
   ajaxGet,
   ajaxPost,
@@ -232,6 +233,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 推送时标记已读
     isRead() {
       let messageRcvIdList = [];
@@ -310,6 +312,7 @@ export default {
         return;
         //Bus.$emit('refesh')
       }
+      this.setTransitionName('slide-right')
       this.$router.push({ path: "/myMessage" });
       // this.push('myApproval')
     },

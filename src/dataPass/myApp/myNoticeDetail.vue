@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import minxin from '../../common/commonfunction';
 import Header from '@/common/header.vue'
 export default {
@@ -40,7 +41,9 @@ export default {
     //this.touchMove(this.$refs.noticeDetail, 'myNotice',this)
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     tobackpage(){
+      this.setTransitionName('slide-right')
       this.$router.push('myNotice')
       // this.push('myNotice')
     }

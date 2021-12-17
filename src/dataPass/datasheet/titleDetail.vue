@@ -12,6 +12,7 @@
 
 
 <script>
+import { mapMutations } from 'vuex';
 import { url } from '../asssets/Api/api';
 import { ajaxGet } from '../../core/mxApi';
 import Header from "@/common/header.vue";
@@ -49,7 +50,6 @@ export default {
     setWaterMark(two, one);
     this.getUrl();
     this.touchMove(this.$refs.maintain, 'home',this)
-    // this.touchMoveOver()
   },
   beforeRouteLeave(to, from, next){
     let pageindex = 0
@@ -69,39 +69,11 @@ export default {
     }
   },
   methods: {
-    touchMoveOver() {
-      var router = this.$router;
-      this.$refs.maintain.addEventListener('touchstart', (e) => {
-        console.log('qqqq')
-        this.startX =  e.touches[0].pageX;
-      })
-      this.$refs.maintain.addEventListener('touchmove', (e) => {
-        console.log('aaaa')
-        var moveEndX = e.changedTouches[0].pageX;
-        var  X = moveEndX - this.startX;
-        this.$refs.maintain.style.position='relative';
-        if ( X < -50 ) {//左滑
-          this.$refs.maintain.style.left=X+'px';
-        }if(X>50){//右滑
-          this.$refs.maintain.style.left=X-50+'px';
-        }
-      })
-      this.$refs.maintain.addEventListener('touchend', (e) => {
-        console.log('ddddd')
-        if ( this.$refs.maintain.offsetLeft < -50) {
-          router.push('./inspect')
-        }
-        if(this.$refs.maintain.offsetLeft > 50){
-          router.push('./equip')
-        }
-        else{
-          this.$refs.maintain.style.left=0+'px';
-        }
-      })
-    },
+    ...mapMutations(['setTransitionName']),
     backtohead() {
       //window.location.href=window.location.href.split('#')[0]
       removeWatermark()
+      this.setTransitionName('slide-right')
       this.$router.push({path: '/home'})
     },
     getUrl() {

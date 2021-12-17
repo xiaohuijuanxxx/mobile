@@ -33,6 +33,7 @@
 <script>
 import Header from "@/common/header.vue";
 import minxin from "@/common/commonfunction.js";
+import { mapMutations } from 'vuex';
 import { ajaxGet, ajaxPost } from "../../core/mxApi";
 import {judgeFileType} from '@/common/commonfunction.js'
 const URL = require('../asssets/Api/api');
@@ -68,6 +69,7 @@ export default {
     this.minHei = window.screen.height - 300
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     openFile(item) {
        let ul = URL.url.downApplyFile + item.fileUrl;
       // MXCommon.download(ul)
@@ -84,11 +86,14 @@ export default {
     back() {
       if (this.$route.query.isNum === 'yes') {
         if (this.$route.query.isHome === 'yes') {
+          this.setTransitionName('slide-right')
           this.push('home')
         } else {
+          this.setTransitionName('slide-right')
           this.push({ name: "numberDynamics"})
         }
       } else {
+        this.setTransitionName('slide-right')
          this.push({ name: "knowledge"})
       }
     },
@@ -141,6 +146,7 @@ export default {
     },
     //数聚动态详情页
     toNumberDyna(item) {
+      this.setTransitionName('slide-right')
       this.push({
         name: "knowledgeDetail",
         params: { kbfileId: item.kbfileId,isNew:item.isNew },

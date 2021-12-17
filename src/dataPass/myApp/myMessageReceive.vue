@@ -378,6 +378,7 @@ import { ajaxGet, ajaxPost } from "../../core/mxApi";
 import minxin from "@/common/commonfunction.js";
 import { setCheckMyselves } from "@/common/commonfunction.js";
 import Bus from "@/bus/bus";
+import { mapMutations } from 'vuex';
 import BScroll from "better-scroll";
 import Myscroll from "@/common/myscroll.vue";
 export default {
@@ -439,6 +440,7 @@ export default {
     }, 500);
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 右滑时
     swipeoutOpen(index) {
       if (index != this.slideMessageRcvId && this.slideMessageRcvId !== '') {
@@ -574,6 +576,7 @@ export default {
         });
     },
     gotoUserDetail(item) {
+      this.setTransitionName('')
       this.$router.push({ name: "messageReceiveDetail", query: item });
       this.onButtonClick(item);
     },

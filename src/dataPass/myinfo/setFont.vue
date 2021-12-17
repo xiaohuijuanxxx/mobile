@@ -51,6 +51,7 @@
 //   javascriptEnabled: true
 // }
 import { Range } from "vux";
+import { mapMutations } from 'vuex';
 import Header from "@/common/header.vue";
 import minxin from "../../common/commonfunction";
 import {judgeFontType} from "../../common/commonfunction";
@@ -80,8 +81,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 返回设置页面
     onSwipeRight(){
+      this.setTransitionName('slide-right')
       this.push("settings");
     },
     tobackpage() {
@@ -95,11 +98,13 @@ export default {
           if (code == "0000" && data != null) {
             judgeFontType(Number(data[0].susSetting1));
           }
+          this.setTransitionName('slide-right')
           this.push("settings");
         })
         .catch((err) => {
           let omsg = this.outmsg(err);
           this.closeloading();
+          this.setTransitionName('slide-right')
           this.push("settings");
           if (!omsg) {
             return;

@@ -1,5 +1,5 @@
 <template>
-  <div class="marginHeader" style="height:100%" v-touch:right="tobackpage">
+  <div class="marginHeader" style="height:100%;" v-touch:right="tobackpage">
     <!-- 用户审批 -->
     <div v-if="reviewtype == '100' || reviewtype == '104' || reviewtype == '105'">
       <Header
@@ -166,6 +166,7 @@
 
 <script>
 let URL = require("../asssets/Api/api");
+import { mapMutations } from 'vuex';
 import { ajaxGet, ajaxPost } from "../../core/mxApi";
 import minxin from "@/common/commonfunction.js";
 import Header from "@/common/header.vue";
@@ -196,8 +197,10 @@ export default {
   },
   mixins: [minxin],
   methods: {
+    ...mapMutations(['setTransitionName']),
     tobackpage() {
       //this.push("home");
+      this.setTransitionName('slide-right')
       this.push('myAssistant')
     },
     gotoUserDetail(row) {
@@ -208,6 +211,7 @@ export default {
         this.actionSheetVisable = true;
         this.sheet("此流程请在PC端处理");
       } else {
+        this.setTransitionName('')
         vm.push({
           path: "/userApprovalDetail",
           query: { node: row.node, applyId: row.applyId,applyStatus: row.applyStatus },
@@ -251,6 +255,7 @@ export default {
           level  = item.dwpDataDealLevel
           dwpType = item.dwpDataDealType
         }
+        this.setTransitionName('')
         this.push({
             name: name,
             // params: {
@@ -265,6 +270,7 @@ export default {
             }
           });
       } else {
+        this.setTransitionName('')
         // 特色需求流程
         console.log(item)
         if (item.node == 1) {
@@ -305,6 +311,7 @@ export default {
         vm.actionSheetVisable = true;
         vm.sheet("此流程请在PC端处理");
       } else {
+        this.setTransitionName('')
         vm.push({
           path: "/requirementApprovalDetail",
           query: { node: row.node, status: row.status ,requireId:row.requireId, id: row.id || '', isZnzl : true},

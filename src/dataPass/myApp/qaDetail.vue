@@ -53,6 +53,7 @@
 </template>
 <script>
 import Header from "@/common/header.vue";
+import { mapMutations } from 'vuex';
 import minxin from "@/common/commonfunction.js";
 import { ajaxGet, ajaxPost } from "../../core/mxApi";
 import {judgeFileType} from '@/common/commonfunction.js'
@@ -93,8 +94,10 @@ export default {
   },
   mounted() {},
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 返回ann
     back() {
+      this.setTransitionName('slide-right')
       this.push({ name: "knowledge"})
     },
     getDatas() {

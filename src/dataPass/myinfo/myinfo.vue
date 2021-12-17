@@ -30,6 +30,7 @@
 </template>
 
 <script>
+  import { mapMutations } from 'vuex';
   let URL=require('../asssets/Api/api')
   import minxin from '../../common/commonfunction';
   import { ajaxGet, closeWindow } from '../../core/mxApi';
@@ -65,6 +66,7 @@
       };
     },
     methods: {
+      ...mapMutations(['setTransitionName']),
       agreeMentAndPolicy(num) {
         let title = '';
         if (num === 1) {
@@ -72,12 +74,15 @@
         } else {
           title = '隐私政策';
         }
+        this.setTransitionName('')
         this.$router.push({ path: '/agreeMentAndPolicy', query: { title } });
       },
       editinfo() {
+        this.setTransitionName('')
         this.$router.push({ path: '/personInfo' });
       },
       setting() {
+        this.setTransitionName('')
         this.$router.push({ path: '/settings' });
       },
       clwindow() {

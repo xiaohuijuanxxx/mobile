@@ -38,7 +38,7 @@ import minxin from '@/common/commonfunction.js'
 import { XHeader,PopupHeader} from 'vux'
 import myMessageReceive from './myMessageReceive'
 import myMessageLaunch from './myMessageLaunch'
-import { mapState} from 'vuex';
+import { mapState,  mapMutations } from 'vuex';
 import Bus from '@/bus/bus';
 export default {
   components: {
@@ -65,6 +65,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     // 监听是否搜索框聚焦
     childSearch() {
       let _this = this
@@ -194,6 +195,7 @@ export default {
       // this.watchScroll()
     },
     tobackpage() {
+       this.setTransitionName('slide-right')
        this.$route.query.isZnzl ? this.$router.go(-1) :
        this.push('home');
        this.$store.commit({

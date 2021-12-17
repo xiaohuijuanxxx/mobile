@@ -75,7 +75,7 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapMutations(['setCharacterSurveyNotMobile', 'setCharacterIssueNotMobile']),
+    ...mapMutations(['setCharacterSurveyNotMobile', 'setCharacterIssueNotMobile','setTransitionName']),
     changephotos(data) {
       let usercd = JSON.parse(sessionStorage.getItem("jzUser"));
       let earacode = usercd.avatar_url.split("/");
@@ -146,6 +146,7 @@ export default {
       //   node
       //   1 部门审批    3 处理人审批
       if (this.isIssue) {
+        this.setTransitionName('')
         // 特色下发流程
         let name = '',status,level,dwpType
         if (item.node == 1) {
@@ -175,6 +176,7 @@ export default {
             }
           });
       } else {
+        this.setTransitionName('')
         // 特色需求流程
         if (item.node == 1) {
           this.push({

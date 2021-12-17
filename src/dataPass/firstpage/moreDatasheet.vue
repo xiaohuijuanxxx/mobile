@@ -210,6 +210,7 @@ export default {
       "setUseIds",
       "setUseData",
       "setUseList",
+      "setTransitionName",
     ]),
     setFocus () {
       this.$refs.search.setFocus()
@@ -373,6 +374,7 @@ export default {
       //    this.actionSheetVisable=true
       //    this.sheet('此功能iOS版本正在建设中，敬请期待','info')
       //  }
+         this.setTransitionName('slide-right')
           this.$router.push({
             name: "titleDetail",
             params:{
