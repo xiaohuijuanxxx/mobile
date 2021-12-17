@@ -407,7 +407,7 @@ export default {
      ...mapState({
         characterSurveyNotMobile: state => state.characterSurveyNotMobile,
         characterIssueNotMobile: state => state.characterIssueNotMobile,
-        transitionName: state=> state.transitionName,
+        // transitionName: state=> state.transitionName,
       }),
   },
   watch: {

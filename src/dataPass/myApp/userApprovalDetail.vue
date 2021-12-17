@@ -108,6 +108,7 @@
 <script>
     let URL=require('../asssets/Api/api')
     import { TransferDomDirective as TransferDom} from 'vux'
+    import { mapMutations, mapState } from 'vuex';
     import { ajaxGet,ajaxPost,closeWindow,ajaxtokenPost,hideWebViewTitle } from '../../core/mxApi'
     import minxin from '@/common/commonfunction.js'
     import Header from '@/common/header.vue'
@@ -144,13 +145,6 @@
                 set(val){}
             }
         },
-        // beforeRouteLeave(to,form,next){
-        //   if(to.path=='/reviewdetail' || to.path=='/approvalFinish'){
-        //    next()
-        //  }else{
-        //    return
-        //  }
-
         // },
         watch: {
             actionSheetVisable(val) {
@@ -206,6 +200,7 @@
             }
         },
         methods: {
+            ...mapMutations(['setTransitionName']),
             onConfirmt()  {
                 closeWindow()
             },
@@ -504,25 +499,27 @@
                     });
                 }else{
                     if (this.$route.query.type === 'yhsp'){
+                        this.setTransitionName('slide-right')
                         this.push('myApproval')
                         // this.$store.commit({
                         //     type: 'changepage',
                         //     pageindex: 2,
                         // });
                     }else {
+                        this.setTransitionName('slide-right')
                         this.push('reviewdetail')
                     }
                 }
             },
             onConfirm () {
                 let _this=this,rowInfom
+                
                 if(this.rowinf){
                     rowInfom=this.rowinf
                 }else{
                     rowInfom=JSON.parse(sessionStorage.getItem('userreviewitem'))
                 }
                 let userinfo=JSON.parse(sessionStorage.getItem('currentUser'))
-
                 let parmas={
                     applyId: this.rowInfo.applyId, //usernames.username
                     applyType: this.rowInfo.applyType,
@@ -570,6 +567,7 @@
                         _this.sheet(omsg)
                     })
                 }
+                _this.setTransitionName('')
                 _this.push("approvalFinish")
             },
             agreeConfirm () {

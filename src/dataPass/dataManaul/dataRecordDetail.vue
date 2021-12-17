@@ -228,6 +228,7 @@ import {
   hideWebViewTitle,
   closeWindow,
 } from "../../core/mxApi";
+import { mapMutations } from 'vuex';
 import seclect from "@/common/seclect.vue";
 const URL = require("../asssets/Api/api");
 import minxin from "@/common/commonfunction.js";
@@ -303,7 +304,7 @@ export default {
     };
   },
   created() {
-
+    this.setTransitionName('slide-right')
     let font = document.body.style.getPropertyValue('--minSize').trim();
     if (font === '') {
       font = '0.36rem'
@@ -340,6 +341,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setTransitionName']),
     gsh(i) {
       // 格式化审批人栏信息
       let text = `${i.username ? i.name+'/'+i.username : ''}`;
@@ -669,6 +671,7 @@ export default {
       // alert(data)
       ajaxPost(URL.url.getRecordApproveDeal, data)
         .then((res) => {
+          this.setTransitionName('')
           this.$router.push({ name: "approvalFinish" });
         })
         .catch((error) => {

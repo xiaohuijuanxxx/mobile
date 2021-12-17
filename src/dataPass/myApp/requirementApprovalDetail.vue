@@ -358,6 +358,7 @@
 <script>
 let URL = require("../asssets/Api/api");
 import { TransferDomDirective as TransferDom } from "vux";
+import { mapMutations } from 'vuex';
 import {
   ajaxGet,
   ajaxPost,
@@ -528,6 +529,7 @@ export default {
     }
   },
   methods: {
+      ...mapMutations(['setTransitionName']),
       //审批意见弹框
       resultContent(state){
         if(!this.resultList[state].opinion){
@@ -972,12 +974,14 @@ export default {
           });
       } else {
         if (this.$route.query.type === "yhsp") {
+          this.setTransitionName('slide-right')
           this.push("myApproval");
           // this.$store.commit({
           //     type: 'changepage',
           //     pageindex: 2,
           // });
         } else {
+          this.setTransitionName('slide-right')
           this.push("reviewdetail");
         }
       }
@@ -1052,6 +1056,7 @@ export default {
               data: { code },
             } = re;
             if (code == "0000") {
+              this.setTransitionName('')
               this.push("approvalFinish");
             }
           })
