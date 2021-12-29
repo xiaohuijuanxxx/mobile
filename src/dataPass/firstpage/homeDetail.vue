@@ -86,7 +86,7 @@
           </flexbox-item>
         </flexbox>
         <flexbox style="padding-top: 1.1rem" :gutter="0">
-          <flexbox-item v-for="(i, index) in useData" :key="index"  v-show="!isUpdate">
+          <flexbox-item v-for="(i, index) in useData" :key="index" >
             <div class="flex-demo" @click="Skip(i.id)" >
               <img slot="icon" class="rwdemo" :src="i.url" />
               <div class="appcationName userZy">{{ i.value }}</div>
@@ -101,7 +101,8 @@
             </div>
           </flexbox-item>
         </flexbox>
-        <flexbox style="margin-top: 0.6rem" v-loading="isUpdate">
+        <flexbox style="margin-top: 0.6rem"
+        >
           <swiper
             auto
             loop
@@ -258,7 +259,6 @@ export default {
   mixins: [minxin],
   data() {
     return {
-      isUpdate: true,
       isLoadding: 0, // 0还没下拉 1 下拉中
       pulldown: true, // 开启下拉刷新监听
       listenScroll: true, // 开启滚动监听
@@ -455,7 +455,6 @@ export default {
                 type: "setBannerList",
                 data: dt,
             });
-            this.isUpdate = false
           }
       })
       .catch((error) => {
@@ -487,7 +486,6 @@ export default {
         })
         .catch((err) => {
           let omsg = this.outmsg(err);
-          this.closeloading();
           if (!omsg) {
             return;
           }
@@ -600,7 +598,6 @@ export default {
         })
         .catch((err) => {
           let omsg = _this.outmsg(err);
-          _this.closeloading();
           if (!omsg) {
             return;
           }
@@ -797,7 +794,6 @@ export default {
       };
       ajaxGet(URL.url.getMyTable, params1)
       .then((res) => {
-        this.closeloading();
         let data = [];
         let dataMid = [];
         if (
@@ -833,7 +829,6 @@ export default {
       })
       .catch((error) => {
           const omsg = this.outmsg(error);
-          this.closeloading();
           if (!omsg) {
             return;
           }
@@ -964,7 +959,6 @@ export default {
       };
       ajaxGet(URL.url.saveOrUpdatelist, params)
         .then((res) => {
-          this.closeloading();
           let data = [],
             befdrbgg = [];
           if (
@@ -1055,7 +1049,6 @@ export default {
         })
         .catch((error) => {
           const omsg = this.outmsg(error);
-          this.closeloading();
           if (!omsg) {
             return;
           }
@@ -1072,6 +1065,23 @@ export default {
 .wrapper {
   overflow: hidden;
 }
+// /deep/.el-loading-spinner{
+//   background: url(../asssets/images/loading.gif) no-repeat !important;
+//   background-color: rgba(0, 0, 0, .3) !important;
+//   background-size: 1rem, 1rem !important;
+//   background-position: center center !important;
+//   width: 1000% !important;
+//   height: 1000% !important;
+//   border-radius: 5% !important;
+//   position: relative !important;
+//   top: 50% !important;
+//   left: 50% !important;
+//   transform: translate(-50%, -50%) !important;
+//   z-index: 9999;
+//   .circular {
+//     display: none !important;
+//   }
+// }
 .firstbox {
   padding: 0.4rem 0 1rem 0;
   width: 92%;

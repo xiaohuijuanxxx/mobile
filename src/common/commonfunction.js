@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Loading } from 'element-ui';
 import { hideWebViewTitle, closeWindow } from '../core/mxApi'
 import { url } from '../dataPass/asssets/Api/api';
 import { ajaxGet } from '../core/mxApi';
@@ -172,12 +173,17 @@ let myMixin = {
         },
         showloading() {
             this.$vux.loading.show({
-                text: 'Loading'
+                // text: 'Loading'
             })
         },
         closeloading() {
             this.$vux.loading.hide()
         },
+        // showloading() {
+        //     this.$loading({});        
+        // closeloading() {
+        //     this.$loading().close()
+        // },
         isloading() {
             return this.$vux.loading.isVisible()
         },

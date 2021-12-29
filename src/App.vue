@@ -1,5 +1,6 @@
 <template>
-    <div id="app">
+    <div id="app" 
+    >
         <!-- <keep-alive> -->
           <transition :name="transitionName">
             <router-view></router-view>
@@ -20,8 +21,18 @@ export default {
   },
   computed:{
     ...mapState({
-      transitionName: state=>state.transitionName
+      transitionName: state=>state.transitionName,
+      myloading: state=>state.myloading,
+      myloadingStyle: state=>state.myloadingStyle,
     })
+  },
+  mounted(){
+    const mystyle = 
+      "background: " + `url(${require('./dataPass/asssets/images/loading.gif')}) no-repeat !important`+ ";background-color:rgba(0, 0, 0, .3) !important;background-size: 1rem, 1rem !important;animation: 0s steps(12, end) infinite !important;background-position: center center !important;width: 1000%;height: 1000%;position: fixed;top: 50% !important;left: 50% !important;transform: translate(-50%, -50%);"
+    let mid = document.querySelectorAll('.weui-toast .weui-loading')[0];
+    mid.setAttribute("style", `${mystyle}`);
+    console.log(mid.style)
+    this.$forceUpdate()
   }
 }
 </script>
@@ -161,7 +172,22 @@ export default {
 .bscroll-vertical-scrollbar{width:5px !important;}
 .bscroll-indicator{background: rgba(0, 0, 0, 0.36) !important;}
 // 重写loading插件样式
-.weui-toast{background: none !important;}
+.weui-toast{
+  background: none !important;
+  // .weui-loading {
+  //     background-image: url(./dataPass/asssets/images/loading.gif) !important;
+  //     background-color: rgba(0, 0, 0, .3) !important;
+  //     background-size: 1rem, 1rem !important;
+  //     animation: 0s steps(12, end) infinite !important;
+  //     background-position: center center !important;
+  //     width: 1000% !important;
+  //     height: 1000% !important;
+  //     position: fixed !important;
+  //     top: 50% !important;
+  //     left: 50% !important;
+  //     transform: translate(-50%, -50%) !important;
+  // }
+}
 
 
 
