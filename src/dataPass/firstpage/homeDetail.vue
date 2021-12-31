@@ -1,6 +1,6 @@
 <template>
   <div class="firstbox esHeader">
-    <flexbox
+    <!-- <flexbox
       style="background: #ffffff; padding-top: 1.2vh; z-index: 999"
       ref="header"
       class="esheaderFixedfirst"
@@ -40,7 +40,7 @@
           />
         </div>
       </flexbox-item>
-    </flexbox>
+    </flexbox> -->
     <Myscroll
       ref="wrapper"
       class="wrapper"
@@ -331,6 +331,7 @@ export default {
     },
   },
   created() {
+    MXWebui.showWebViewTitle();
     this.setTransitionName('')
     this.getBannerList();
     // //this.loadData()
@@ -353,7 +354,7 @@ export default {
     removeWatermark()
     let hei =
       document.body.offsetHeight -
-      this.$refs.header.$el.offsetHeight -
+      // this.$refs.header.$el.offsetHeight -
       this.tabbarHeight;
     this.$refs.wrapper.$el.style.cssText = "height:" + hei + "px";
     let suerColor = document.getElementsByClassName(
@@ -396,7 +397,7 @@ export default {
       handler(newval, oldval) {
         let hei =
           document.body.offsetHeight -
-          this.$refs.header.$el.offsetHeight -
+          // this.$refs.header.$el.offsetHeight -
           this.tabbarHeight;
         this.$refs.wrapper.$el.style.cssText = "height:" + hei + "px";
         this.getFontSeted();
@@ -429,6 +430,17 @@ export default {
         }
       },
     },
+    "$store.state.bannerList": {
+      handler(newval, oldval){
+        console.log(newval, oldval);
+        if(newval.length > 0){
+          this.closeloading()
+        }else{
+          this.showloading()
+        }
+      },
+      immediate:true
+    }
   },
   methods: {
     ...mapMutations([
@@ -445,17 +457,17 @@ export default {
     getBannerList() {
       ajaxGet(URL.url.getBanner)
       .then((res) => {
-        if (
-            res.data.data != null &&
-            res.data.data != "null" &&
-            res.data.data != ""
-        ) {
-          const dt = res.data.data.filter((item) => item.isEnable === "Y");
-          this.$store.commit({
-              type: "setBannerList",
-              data: dt,
-          });
-        }
+          if (
+              res.data.data != null &&
+              res.data.data != "null" &&
+              res.data.data != ""
+          ) {
+            const dt = res.data.data.filter((item) => item.isEnable === "Y");
+            this.$store.commit({
+                type: "setBannerList",
+                data: dt,
+            });
+          }
       })
       .catch((error) => {
           const omsg = this.outmsg(error);
@@ -511,7 +523,7 @@ export default {
         }
       let hei =
         document.body.offsetHeight -
-        this.$refs.header.$el.offsetHeight -
+        // this.$refs.header.$el.offsetHeight -
         this.tabbarHeight;
       this.$refs.wrapper.$el.style.cssText = "height:" + hei + "px";
       this.getFontSeted();
@@ -706,7 +718,7 @@ export default {
         //获取全部固定报表的list
         await ajaxGet(URL.url.getThemeList, parmas)
           .then((res) => {
-            this.closeloading();
+            // this.closeloading(parmas);
             if (
               res.data.data &&
               res.data.data != null &&
@@ -870,7 +882,7 @@ export default {
             });
           }
           this.data = data;
-          // this.closeloading();
+          this.closeloading();
         })
         .catch((err) => {
           const omsg = this.outmsg(err);
@@ -1057,6 +1069,9 @@ export default {
         });
     },
   },
+  beforeDestroy(){
+    MXWebui.hideWebViewTitle();
+  }
 };
 </script>
 
@@ -1064,6 +1079,7 @@ export default {
 @import "~vux/src/styles/1px.less";
 .wrapper {
   overflow: hidden;
+  margin-top: -1rem;
 }
 // /deep/.el-loading-spinner{
 //   background: url(../asssets/images/loading.gif) no-repeat !important;
