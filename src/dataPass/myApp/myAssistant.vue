@@ -182,6 +182,10 @@ export default {
       this.$refs.noassisant.style.width = w + "px";
       this.$refs.noassisant.style.lineHeight = h + "px";
     }
+    this.showloading();
+    setTimeout(()=>{
+      this.closeloading();
+    },1000)
   },
   data() {
     return {

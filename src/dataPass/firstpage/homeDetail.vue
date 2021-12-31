@@ -332,7 +332,7 @@ export default {
   },
   created() {
     this.setTransitionName('')
-    // this.getBannerList();
+    this.getBannerList();
     // //this.loadData()
     // if (this.bannerList != "") {
     //     for (let i = 0; i < this.bannerList.length; i++) {
@@ -348,7 +348,7 @@ export default {
   },
   mounted() {
     //轮播图
-    this.getBannerList();
+    // this.getBannerList();
     // 清除水印
     removeWatermark()
     let hei =
@@ -445,17 +445,17 @@ export default {
     getBannerList() {
       ajaxGet(URL.url.getBanner)
       .then((res) => {
-          if (
-              res.data.data != null &&
-              res.data.data != "null" &&
-              res.data.data != ""
-          ) {
-            const dt = res.data.data.filter((item) => item.isEnable === "Y");
-            this.$store.commit({
-                type: "setBannerList",
-                data: dt,
-            });
-          }
+        if (
+            res.data.data != null &&
+            res.data.data != "null" &&
+            res.data.data != ""
+        ) {
+          const dt = res.data.data.filter((item) => item.isEnable === "Y");
+          this.$store.commit({
+              type: "setBannerList",
+              data: dt,
+          });
+        }
       })
       .catch((error) => {
           const omsg = this.outmsg(error);
@@ -706,7 +706,7 @@ export default {
         //获取全部固定报表的list
         await ajaxGet(URL.url.getThemeList, parmas)
           .then((res) => {
-            this.closeloading(parmas);
+            this.closeloading();
             if (
               res.data.data &&
               res.data.data != null &&
@@ -870,7 +870,7 @@ export default {
             });
           }
           this.data = data;
-          this.closeloading();
+          // this.closeloading();
         })
         .catch((err) => {
           const omsg = this.outmsg(err);
