@@ -128,7 +128,7 @@ export default {
 }
 // ͷ���̶�
 .headerFixed{position:fixed !important;top:0 !important;z-index:999;width:100%;left:0;right:0;float:inherit;top:0;}
-.marginHeader{margin-top:4vh;}
+.marginHeader{padding-top:4vh;}
 .weui-toast{font-size:var(--minSizemid);}
 .weui-cell{padding:0.25rem 4% !important;}
 .vux-flexbox-item{line-height:0.3rem;}
