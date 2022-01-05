@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;padding-top:0.1rem;" class="marginHeader" v-touch:right="tobackpage">
+    <div style="height:100%;padding-top:0.2rem;" class="marginHeader" v-touch:right="tobackpage">
       <Header :backoptions="backoptions" title='设置' @tobackpage="tobackpage" />
         <!-- <x-header :left-options="backoptions" @on-click-back="tobackpage" class="cjHeader setheaderFixed">设置</x-header> -->
         <group style="height:calc(100%-46px);position:fixed;width:100%;">

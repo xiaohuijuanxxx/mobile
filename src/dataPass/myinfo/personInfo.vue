@@ -1,5 +1,5 @@
 <template>
-    <div style="height:auto;padding-top:0.1rem;" class="marginHeader person" v-touch:right="tobackpage">
+    <div style="height:auto;padding-top:0.3rem;" class="marginHeader person" v-touch:right="tobackpage">
         <!-- <x-header :left-options="backoptions" @on-click-back="tobackpage" class="cjHeader headerFixed">个人信息</x-header> -->
         <Header :backoptions="backoptions" @tobackpage='tobackpage' title="个人信息" />
         <group style="height: auto;" class="grou">
@@ -99,10 +99,10 @@
             Header
         },
         mounted() {
-            MXWebui.disableTranslucentHeader({
-                onSuccess: function() {}, // 禁⽌成功
-                onFail: function() {} // 禁⽌失败
-            });
+            // MXWebui.disableTranslucentHeader({
+            //     onSuccess: function() {}, // 禁⽌成功
+            //     onFail: function() {} // 禁⽌失败
+            // });
             this.getPerOrg();
         },
         beforeRouteLeave(to,from,next){
@@ -418,6 +418,4 @@
     // 所有label 浅色字体色为 #999999
     .canEditCon{border-top:.5px solid #eceaea;margin-left:4%;position:relative;}
     .bankFixed{position:absolute;bottom:0;z-index:99;color:#999999;left:4.98em;}
-</style>
-<style scoped>
 </style>
