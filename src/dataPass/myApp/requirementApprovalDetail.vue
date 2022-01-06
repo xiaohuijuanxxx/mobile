@@ -1140,7 +1140,7 @@ export default {
             txt = "申请部门条线总监    ";
           }
         } else if (node == 3) {
-          txt = "数据管理部经办人    ";
+          txt = "数据管理部    ";
         } else if (node == 4) {
           txt = "数据管理部受理人    ";
         }
