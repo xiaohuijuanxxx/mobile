@@ -1,10 +1,11 @@
 <template>
   <div class="firstbox esHeader">
-    <!-- <flexbox
-      style="background: #ffffff; padding-top: 1.2vh; z-index: 999"
+    <flexbox
+      style="background: #ffffff; padding-top: 1.2vh; "
       ref="header"
       class="esheaderFixedfirst"
     >
+    <!-- z-index: 999 -->
       <flexbox-item :span="2" @click.native="tomypage">
         <img
           v-if="headerurl != undefined"
@@ -40,7 +41,7 @@
           />
         </div>
       </flexbox-item>
-    </flexbox> -->
+    </flexbox>
     <Myscroll
       ref="wrapper"
       class="wrapper"
@@ -70,7 +71,7 @@
               />
             </div>
           </flexbox-item>
-          <flexbox-item :span="7" style="margin-left: 0.2rem">
+          <flexbox-item :span="6.5" style="margin-left: 0.2rem">
             <div class="flex-demott" v-html="contents"></div>
           </flexbox-item>
           <flexbox-item>
@@ -331,7 +332,7 @@ export default {
     },
   },
   created() {
-    MXWebui.showWebViewTitle();
+    // MXWebui.showWebViewTitle();
     this.setTransitionName('')
     this.getBannerList();
     // //this.loadData()
@@ -1079,7 +1080,7 @@ export default {
 @import "~vux/src/styles/1px.less";
 .wrapper {
   overflow: hidden;
-  margin-top: -1rem;
+  margin-top: 0.1rem;
 }
 // /deep/.el-loading-spinner{
 //   background: url(../asssets/images/loading.gif) no-repeat !important;

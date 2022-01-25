@@ -110,6 +110,12 @@ export default {
         case "5":
           return `总行接口人：${text}`;
           break;
+        case "7":
+          return `总行接口人审批：${text}`;
+          break;
+        case "8":
+          return `总行接口人复核：${text}`;
+          break;
         // case "6":
         //   return `软件开发中心领导：${text}`;
         //   break;
@@ -179,9 +185,9 @@ export default {
               同意`;
             console.log(this.flowData);
             this.$forceUpdate()
-            this.flowData.sort(function (a, b) {
-              return a.node - b.node;
-            });
+            // this.flowData.sort(function (a, b) {
+            //   return a.node - b.node;
+            // });
             if (data.length > 1) {
               this.flowm = `height:${(Number(data.length) - 1) * 0.75}rem;`;
             }

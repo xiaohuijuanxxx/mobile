@@ -524,8 +524,14 @@ export default {
           return `软件开发中心领导：${text}`;
           break;
         case "7":
-          return `总行接口人：${text}`;
+          return `总行接口人审批：${text}`;
           break;
+        case "8":
+          return `总行接口人复核：${text}`;
+          break;
+        // case "7":
+        //   return `总行接口人：${text}`;
+        //   break;
       }
     },
     // 获取审批人兰信息
@@ -540,9 +546,9 @@ export default {
             } = res;
             this.flowData = data;
             console.log(this.flowData);
-            this.flowData.sort(function (a, b) {
-              return a.node - b.node;
-            });
+            // this.flowData.sort(function (a, b) {
+            //   return a.node - b.node;
+            // });
             if (data.length > 1) {
               this.flowm = `height:${(Number(data.length) - 1) * 0.75}rem;`;
             }
