@@ -28,7 +28,7 @@ export default {
   },
   mounted(){
     const mystyle = 
-      "background: " + `url(${require('./dataPass/asssets/images/loading.gif')}) no-repeat !important`+ ";background-color:rgba(0, 0, 0, .3) !important;background-size: 1rem, 1rem !important;animation: 0s steps(12, end) infinite !important;background-position: center center !important;width: 1000%;height: 1000%;position: fixed;top: 50% !important;left: 50% !important;transform: translate(-50%, -50%);"
+      "background: " + `url(${require('./dataPass/asssets/images/loading.gif')}) no-repeat !important`+ ";background-color:rgba(0, 0, 0, .3) !important;background-size: 2rem, 2rem !important;animation: 0s steps(12, end) infinite !important;background-position: center center !important;width: 1000%;height: 1000%;position: fixed;top: 150% !important;left: 50% !important;transform: translate(-50%, -50%);"
     let mid = document.querySelectorAll('.weui-toast .weui-loading')[0];
     mid.setAttribute("style", `${mystyle}`);
     console.log(mid.style)

@@ -1,5 +1,5 @@
 <template>
-  <div class="firstbox esHeader">
+  <div class="firstbox esHeaderMain">
     <flexbox
       style="background: #ffffff; padding-top: 1.2vh; "
       ref="header"
@@ -23,7 +23,7 @@
           <img
             slot="icon"
             src="static/sjtpacture.png"
-            style="display: inline-block; width: 1.8rem; margin-left: -0.4rem"
+            style="display: inline-block; width: 2.5rem; margin-left: -0.4rem; margin-top:0.1rem"
           />
         </div>
       </flexbox-item>
@@ -355,8 +355,8 @@ export default {
     removeWatermark()
     let hei =
       document.body.offsetHeight -
-      // this.$refs.header.$el.offsetHeight -
-      this.tabbarHeight;
+      this.$refs.header.$el.offsetHeight -
+      this.tabbarHeight - 10;
     this.$refs.wrapper.$el.style.cssText = "height:" + hei + "px";
     let suerColor = document.getElementsByClassName(
       "weui-dialog__btn_primary"
@@ -398,8 +398,8 @@ export default {
       handler(newval, oldval) {
         let hei =
           document.body.offsetHeight -
-          // this.$refs.header.$el.offsetHeight -
-          this.tabbarHeight;
+          this.$refs.header.$el.offsetHeight -
+          this.tabbarHeight - 10;
         this.$refs.wrapper.$el.style.cssText = "height:" + hei + "px";
         this.getFontSeted();
         const userinfo = JSON.parse(sessionStorage.getItem("currentUser"));
@@ -524,8 +524,8 @@ export default {
         }
       let hei =
         document.body.offsetHeight -
-        // this.$refs.header.$el.offsetHeight -
-        this.tabbarHeight;
+        this.$refs.header.$el.offsetHeight -
+        this.tabbarHeight - 10;
       this.$refs.wrapper.$el.style.cssText = "height:" + hei + "px";
       this.getFontSeted();
       let suerColor = document.getElementsByClassName(
@@ -1158,6 +1158,9 @@ export default {
 }
 .esHeader {
   margin-top: 0.2rem; // 所有页面有刘海屏幕 都是这个距离
+}
+.esHeaderMain {
+  margin-top: 0.55rem; // 所有页面有刘海屏幕 都是这个距离
 }
 .pacturecss img {
   border-radius: 0.2rem;

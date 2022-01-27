@@ -309,7 +309,7 @@ export default {
     },
     //格式化表格数据
     formatText(item) {
-      let text = ` ${item.name ? item.name + '/' + item.username : item.deptName}`
+      let text = `${item.username ? item.name + '/' + item.username : ''}`
       switch (item.node) {
         case "1":
           return `部门负责人：${text}`;
@@ -333,7 +333,7 @@ export default {
         //   return `总行接口人：${text}`;
         //   break;
         case "7":
-          return `总行接口人审批：${text}`;
+          return `总行接口人审批${text ? '：' + text : ''}`;
           break;
         case "8":
           return `总行接口人复核：${text}`;
@@ -358,7 +358,7 @@ export default {
               this.flowm = `height:${(Number(data.length) - 1) * 0.75}rem;`;
             }
             this.flowData.forEach((item) => {
-              if (item.status === "待处理" || item.status === "处理中") {
+              if (item.status === "待处理" || item.status === "处理中" || item.status === "待复核") {
                 item.isDone = false;
                 item.lineDone = false;
               } else {
