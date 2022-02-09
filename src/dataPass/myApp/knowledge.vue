@@ -127,11 +127,13 @@ export default {
     ...mapMutations(['setTransitionName']),
     back() {
       this.setTransitionName('slide-right')
-      this.push("home");
-      this.$store.commit({
-        type: "changepage",
-        pageindex: 2,
-      });
+      setTimeout(()=>{
+        this.push("home");
+        this.$store.commit({
+          type: "changepage",
+          pageindex: 2,
+        });
+      })
     },
     // 获取显示的文档栏目的类型
     getMenuTypeCur(name, index) {

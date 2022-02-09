@@ -90,11 +90,13 @@ export default {
     },
     tobackpage() {
       this.setTransitionName('slide-right')
-      this.push('home')
-          this.$store.commit({
-            type: 'changepage',
-            pageindex: 2,
-          });
+      setTimeout(()=>{
+        this.push('home')
+        this.$store.commit({
+          type: 'changepage',
+          pageindex: 2,
+        });
+      })
     }
   }
 }

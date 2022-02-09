@@ -196,13 +196,14 @@ export default {
     },
     tobackpage() {
        this.setTransitionName('slide-right')
-       this.$route.query.isZnzl ? this.$router.go(-1) :
-       this.push('home');
-       this.$store.commit({
-            type: 'changepage',
-            pageindex: 2,
-          });
-
+       setTimeout(()=>{
+          this.$route.query.isZnzl ? this.$router.go(-1) :
+          this.push('home');
+          this.$store.commit({
+              type: 'changepage',
+              pageindex: 2,
+            });
+          })
       },
       removeEvent() {
         Bus.$on('removeEvent', () => {

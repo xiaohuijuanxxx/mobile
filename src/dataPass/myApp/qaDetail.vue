@@ -98,7 +98,9 @@ export default {
     // 返回ann
     back() {
       this.setTransitionName('slide-right')
-      this.push({ name: "knowledge"})
+      setTimeout(()=>{
+        this.push({ name: "knowledge"})
+      })
     },
     getDatas() {
       let isSHOW = this.$route.params.isNew

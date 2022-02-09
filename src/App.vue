@@ -26,9 +26,9 @@ export default {
       myloadingStyle: state=>state.myloadingStyle,
     })
   },
-  mounted(){
+  created(){
     const mystyle = 
-      "background: " + `url(${require('./dataPass/asssets/images/loading.gif')}) no-repeat !important`+ ";background-color:rgba(0, 0, 0, .3) !important;background-size: 2rem, 2rem !important;animation: 0s steps(12, end) infinite !important;background-position: center center !important;width: 1000%;height: 1000%;position: fixed;top: 150% !important;left: 50% !important;transform: translate(-50%, -50%);"
+      "background: " + `url(${require('./dataPass/asssets/images/loading.gif')}) no-repeat !important`+ ";background-color:rgba(0, 0, 0, .3) !important;background-size: 2rem, 2rem !important;animation: 0s steps(12, end) infinite !important;background-position: center center !important;width: 1000%;height: 1000%;position: fixed;top: 165% !important;left: 50% !important;transform: translate(-50%, -50%);"
     let mid = document.querySelectorAll('.weui-toast .weui-loading')[0];
     mid.setAttribute("style", `${mystyle}`);
     console.log(mid.style)
@@ -127,7 +127,7 @@ export default {
   padding: 0 0.2rem !important;
 }
 // ͷ���̶�
-.headerFixed{position:fixed !important;top:0 !important;z-index:999;width:100%;left:0;right:0;float:inherit;top:0;}
+.headerFixed{position:fixed !important;top:0 !important;z-index:9999;width:100%;left:0;right:0;float:inherit;top:0;}
 .marginHeader{padding-top:4vh;}
 .weui-toast{font-size:var(--minSizemid);}
 .weui-cell{padding:0.25rem 4% !important;}

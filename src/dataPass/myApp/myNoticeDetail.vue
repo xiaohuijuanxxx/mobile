@@ -44,7 +44,9 @@ export default {
     ...mapMutations(['setTransitionName']),
     tobackpage(){
       this.setTransitionName('slide-right')
-      this.$router.push('myNotice')
+      setTimeout(()=>{
+        this.$router.push('myNotice')
+      })
       // this.push('myNotice')
     }
   }

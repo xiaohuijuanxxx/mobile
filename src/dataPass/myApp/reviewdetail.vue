@@ -201,7 +201,9 @@ export default {
     tobackpage() {
       //this.push("home");
       this.setTransitionName('slide-right')
-      this.push('myAssistant')
+      setTimeout(()=>{
+        this.push('myAssistant')
+      })
     },
     gotoUserDetail(row) {
       let vm = this,

@@ -729,7 +729,7 @@ export default {
 .search-parent {
   background: #ffffff;
   position: fixed;
-  z-index: 99;
+  z-index: 9999;
   width: 100%;
 }
 </style> background: red;

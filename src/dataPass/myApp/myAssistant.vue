@@ -1,5 +1,5 @@
 <template>
-  <div style="box-sizing: border-box; background-color: #fafafa; overflow: hidden;padding-top:45px;" v-touch:right="back">
+  <div style="box-sizing: border-box;background-color: #fafafa; overflow: hidden;padding-top:45px;" v-touch:right="back">
     <Header :backoptions="backoptions" @tobackpage="back" title="智能助理" />
     <div class="assisantcss" v-if="totalCount">
       <div class="assisanttitle midFontSize">
@@ -204,15 +204,17 @@ export default {
   methods: {
     ...mapMutations(['setTransitionName']),
     back() {
-        let index;
-        let source = sessionStorage.getItem('source') || '';
-        source == 'home' ? index=0 : index = 2;
         this.setTransitionName('slide-right')
-        this.push('home');
-        this.$store.commit({
-            type: 'changepage',
-            pageindex: index,
-        });
+        setTimeout(()=>{
+          let index;
+          let source = sessionStorage.getItem('source') || '';
+          source == 'home' ? index=0 : index = 2;
+          this.push('home');
+          this.$store.commit({
+              type: 'changepage',
+              pageindex: index,
+          });
+        })
     },
     gotoAppreview(row) {
       let allTypeList=["100","104","105", "400","401","402", "403", "404", "601","602","603", "606", "701","702","703", "705", "706", "707", "800", "801", "802","803","804","805"]

@@ -975,14 +975,18 @@ export default {
       } else {
         if (this.$route.query.type === "yhsp") {
           this.setTransitionName('slide-right')
-          this.push("myApproval");
+          setTimeout(()=>{
+            this.push("myApproval");
+          })
           // this.$store.commit({
           //     type: 'changepage',
           //     pageindex: 2,
           // });
         } else {
           this.setTransitionName('slide-right')
-          this.push("reviewdetail");
+          setTimeout(()=>{
+            this.push("reviewdetail");
+          })
         }
       }
     },

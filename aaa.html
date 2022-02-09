@@ -31,6 +31,8 @@
         <b style="font-size: 0.4rem;display: block;line-height: 1.5rem;text-align: center;">0
         </b>
     </span>
+    <input id="fileinput" type="file" onchange="upload()">
+    <button>文件上传</button>
     <script>
         function strStr( haystack, needle) {
             if (needle.length() == 0)
@@ -98,6 +100,11 @@
                 j = next[j];
             }
         }
+
+        function upload(){
+            console.log(document.getElementById('fileinput').files[0])
+        }
+
     </script>
 </body>
 </html>
