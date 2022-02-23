@@ -288,7 +288,7 @@
       <popup
         v-model="showselcet"
         position="bottom"
-        height="100%"
+        height="98%"
         :hide-on-blur="false"
         style="position: absolute !impotant; z-index: 999"
       >

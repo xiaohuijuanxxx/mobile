@@ -29,6 +29,9 @@ import Header from './common/index.js'//引用全局组件Button
 import touch from 'vue-directive-touch';
 Vue.use(touch)
 
+// import VueTouch from 'vue-touch';
+// Vue.use(VueTouch)
+
 import { 
   XImg, 
   XButton,

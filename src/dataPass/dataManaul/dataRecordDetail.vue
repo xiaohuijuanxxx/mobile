@@ -190,7 +190,7 @@
       <popup
         v-model="showselcet"
         position="bottom"
-        height="100%"
+        height="98%"
         :hide-on-blur="false"
         style="position: absolute !impotant; z-index: 999"
       >
@@ -344,7 +344,7 @@ export default {
     ...mapMutations(['setTransitionName']),
     gsh(i) {
       // 格式化审批人栏信息
-      let text = `${i.username ? i.name+'/'+i.username : ''}`;
+      let text = `${i.userName ? i.name+'/'+i.userName : ''}`;
       return `${i.node} ${text}`
     },
     openFile(item) {
@@ -564,6 +564,7 @@ export default {
               data: { data, code },
             } = res;
             this.dealSpeedList = data;
+            console.log(111,this.dealSpeedList);
             if (this.$route.query.node >= 3) {
               this.upPersonDealMesg = (data[data.length - 2]).approveResult
               this.dealForm.approveResult = (data[data.length - 2]).approveResult

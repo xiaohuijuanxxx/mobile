@@ -328,7 +328,7 @@
       <popup
         v-model="showselcet"
         position="bottom"
-        height="100%"
+        height="98%"
         :hide-on-blur="false"
         style="position: absolute !impotant; z-index: 999"
       >
@@ -809,7 +809,7 @@ export default {
               }
             });
             _this.statelist = data;
-            console.log(_this.statelist);
+            console.log(111,_this.statelist);
             if(_this.statelist.length == 1){
               _this.flowm = `height:0.3rem;`;
             }else{
@@ -854,6 +854,7 @@ export default {
               }
             });
             _this.statelist = data;
+            console.log(_this.statelist);
             // let rowinfos=JSON.parse(sessionStorage.getItem('needreviewitem'))
             if(_this.statelist.length == 1){
               _this.flowm = `height:0.3rem;`;
@@ -1144,9 +1145,11 @@ export default {
             txt = "申请部门条线总监    ";
           }
         } else if (node == 3) {
-          txt = "数据管理部    ";
+          txt = "数据管理部经办人    ";
         } else if (node == 4) {
           txt = "数据管理部受理人    ";
+        } else if (node == 5) {
+          txt = "数据管理部负责人    ";
         }
         return txt;
       },
